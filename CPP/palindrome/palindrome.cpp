@@ -17,6 +17,7 @@ int main() {
   char input[80] = {};
   char output[80] = {};
   int index = 0;
+  bool check; 
 
   cin.get(input, 80);
   
@@ -28,9 +29,27 @@ int main() {
   }
 
   output[index] = '\0';
-
-
   cout << output << endl;
 
+  for (int j = 0; j < index; j++) {
+    output[j] = toupper( output[j] );
+    output[index - 1] = toupper( output[index - 1] );
+    if (output[j] == output[index - 1]) {
+      check = true;
+      index--;
+    }
+    else {
+      check = false;
+      break;
+    }
+  }
+
+  if (check == true) {
+    cout << "Palindrome" << endl;
+  }
+  else if (check == false) {
+    cout << "Not a palindrome" << endl;
+  }
+  
   return 0;
 }
