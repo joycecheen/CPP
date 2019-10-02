@@ -22,11 +22,10 @@ int main() {
   for (int z = 0; z < 2; ++z) {
     cout << move[z] << endl;
   }
-  int x = move[0];
-  int y = (move[1] - 'a');
-  cout << x << endl;
-  cout << y << endl;
-  grid[x+1][y+1] = 'X';
+  int y = (move[1] - 'a' + 1);
+  cout << (move[0])+1 << endl;
+  cout << y + 1 << endl;
+  grid[move[0]+1][y] = 'X';
   printBoard(grid);
   
   return 0;
