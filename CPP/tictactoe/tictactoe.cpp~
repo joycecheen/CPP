@@ -4,7 +4,6 @@
 
 using namespace std;
 
-void addMove(char move[2], int x, int y);
 void printBoard(char grid[4][4]);
 
 int main() {
@@ -16,28 +15,15 @@ int main() {
       {'b', ' ', ' ', ' '},
       {'c', ' ', ' ', ' '}
     };
-  int x;
-  int y;
 
   printBoard(grid);
-  addMove(x,y); 
-  /*cin.get(move,3);
-  int x = (move[0] - 48); 
-  int y = (move[1] - 'a' + 1);
-  cout << "x: " << x << endl;
-  cout << "y: " << y << endl;
-  grid[y][x] = 'X';
-  printBoard(grid); */
+
+  cin.get(move,3);
+  for (int z = 0; z < 2; ++z) {
+    cout << move[z];
+  }
   
   return 0;
-}
-
-void addMove(char move[2], int x, int y) {
-  cin.get(move,3);
-  int x = (move[0] - 48);
-  int y = (move[1] - 'a' + 1);
-  grid[y][x] = 'X';
-    return;
 }
 
 void printBoard(char grid[4][4]) {
