@@ -5,67 +5,48 @@
 using namespace std;
 
 //void addMove(char grid [4][4], char move[2], int x, int y);
-void printBoard();
+void printBoard(char grid[4][4]);
 
-char move[2] = {};
-char grid[4][4] =
+const int BLANK = 0;
+const int X_MOVE = 1;
+const int O_MOVE = 2;
+const int X_TURN = 0;
+const int O_TURN = 1;
+
+int main() {
+  
+  char move[5];
+  char grid[4][4] =
   {
     {' ', '1', '2', '3'},
     {'a', ' ', ' ', ' '},
     {'b', ' ', ' ', ' '},
     {'c', ' ', ' ', ' '}
   };
-const int BLANK = 0;
-const int X_MOVE = 1;
-const int O_MOVE = 2;
-const int X_TURN = 0;
-const int O_TURN = 1;
-int turn = X_TURN;
-int row = 0;
-char column = 0;
+  int turn = X_TURN;
+  int row = 0;
+  int column = 0;
 
-int x;
-char y;
-
-int main() {
-  
   //boolean game = 0;
 
-  printBoard();
-  cout << "Enter a letter for the row: ";
-  getline(cin,row);
-  cout << "Enter a number for the column: ";
-  getline(cin,column);
-  row = row - 'a' + 1;
-  column = column + 1;
+  printBoard(char grid[4][4]);
+  cout << "Enter a letter for the row, and number for the column: ";
+  cin >> move;
+  column = (int)(move[1] - '1' + 1);
+  row = (int)(move[0] - 'a' + 1);
   cout << "row: " << row << endl;
   cout << "column: " << column << endl;
-  
-  x = (move[0] - 48); 
-    y = (move[1] - 'a' + 1);
-    cout << "x: " << x << endl;
-    cout << "y: " << y << endl;
-      if (grid[y][x] == ' ') {
-        grid[y][x] = 'X';
+  if (grid[row][column] == ' ') {
+     grid[row][column] = 'X';
 
-      }
+  }
       
-    printBoard(); 
-    //}
+    printBoard(char grid[4][4]); 
   
   return 0;
 }
 
-/*void addMove(char grid [4][4], char move[2], int x, int y) {
-  cin.get(move,3);
-  x = (move[0] - 48);
-  y = move[1];
-  y2 = y - 'a' + 1;
-  grid[y2][x] = 'X';
-    return;
-}*/
-
-void printBoard() {
+void printBoard(char grid[4][4]) {
   for (int i = 0; i < 4; ++i) {
     for (int j = 0; j < 4; ++j) {
       cout << grid[i][j] << " ";
