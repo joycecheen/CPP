@@ -23,11 +23,11 @@ int main() {
   int column = 0;
 
   bool game = true;
+  bool win = false;
   char response = ' ';
 
   while (game == true) {
-    while (checkWin(grid, X_MOVE) == false && checkWin(grid, O_MOVE) == false
-	   && checkTie(grid) == false) {
+    while (win == false) {
       cout << endl;
       printBoard(grid);
       cout << "Enter a letter for the row, and number for the column: ";
@@ -47,8 +47,12 @@ int main() {
       else {
 	cout << "ILLEGAL  MOVE" << endl;
       }
-    }
 
+      if (checkWin(grid, X_MOVE) == true || checkWin(grid, O_MOVE) == true
+	  || checkTie(grid) == true) {
+	win = true;
+      }
+    }
     if (checkWin(grid, X_MOVE) == true) {
       cout << "X wins!";
     }
@@ -56,7 +60,7 @@ int main() {
       cout << "O wins!";
     }
     else if (checkTie(grid) == true) {
-      cout << "Tie!"; 
+      cout << "Tie!";
     }
   }
   bool q = true;
