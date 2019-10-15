@@ -23,6 +23,7 @@ int main() {
   int column = 0;
 
   bool game = true;
+  bool q = true;
   bool win = false;
   char response = ' ';
 
@@ -51,33 +52,32 @@ int main() {
       if (checkWin(grid, X_MOVE) == true || checkWin(grid, O_MOVE) == true
 	  || checkTie(grid) == true) {
 	win = true;
+	if (checkWin(grid, X_MOVE) == true) {
+	  cout << "X wins!" << endl;
+	}
+	else if (checkWin(grid, O_MOVE) == true) {
+	  cout << "O wins!" << endl;
+	}
+	else if (checkTie(grid) == true) {
+	  cout << "Tie!" << endl;
+	}
       }
     }
-    if (checkWin(grid, X_MOVE) == true) {
-      cout << "X wins!";
-    }
-    else if (checkWin(grid, O_MOVE) == true) {
-      cout << "O wins!";
-    }
-    else if (checkTie(grid) == true) {
-      cout << "Tie!";
-    }
-  }
-  bool q = true;
-  while (q = true) {
-    cout << "Would you like to play again? (y or n)" << endl;
-    cin >> response;
-    if (response == 'n') {
-      q = false;
-      game = false;
-      exit(0);
-    }
-    else if (response == 'y') {
-      q = false;
-      int grid [3][3] = { 0 };
-    }
-    else {
-      cout << "Please enter y or n!" << endl;
+    while (q = true) {
+      cout << "Would you like to play again? (y or n)" << endl;
+      cin >> response;
+      if (response == 'n') {
+	q = false;
+	game = false;
+	exit(0);
+      }
+      else if (response == 'y') {
+	q = false;
+        //grid[3][3] = { 0 };
+      }
+      else {
+	cout << "Please enter y or n!" << endl;
+      }
     }
   }
     
