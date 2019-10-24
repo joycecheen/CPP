@@ -12,13 +12,13 @@ struct student {
 
 using namespace std;
 
-void add(vector<student>& list, char fnameinput[99], char lnameinput[99], int idinput,
+void add(vector<student*>& list, char fnameinput[99], char lnameinput[99], int idinput,
 	 float gpainput);
-void print(vector<student>& list);
-void deletestudent(vector<student>& list);
+void print(vector<student*>& list);
+void deletestudent(vector<student*>& list);
 
 int main() {
-  vector<student> list;
+  vector<student*> list;
   char fnameinput[99];
   char lnameinput[99];
   int idinput;
@@ -44,14 +44,19 @@ int main() {
     else if (strcmp(response, "DELETE") == 0) {
       deletestudent(list);
     }
+    else if (strcmp(response, "QUIT") == 0) {
+      run = false;
+    }
+    else {
+      cout << "Please enter a valid command (look above ^^)" << endl << endl;
+    }
     
   }
-  
   
   return 0;
 }
 
-void add (vector<student>& list, char fnameinput[99], char lnameinput[99], int idinput,
+void add (vector<student*>& list, char fnameinput[99], char lnameinput[99], int idinput,
 	  float gpainput) {
   cout << "Enter First Name: ";
   cin >> fnameinput;
@@ -63,43 +68,50 @@ void add (vector<student>& list, char fnameinput[99], char lnameinput[99], int i
   cin >> gpainput;
   cout << "ADDED" << endl << endl;
 
-  student s;
-  strcpy(s.fname, fnameinput);
-  strcpy(s.lname, lnameinput);
-  s.id = idinput;
-  s.gpa = gpainput;
+  student *s = new student();
+  strcpy(s -> fname, fnameinput);
+  strcpy(s -> lname, lnameinput);
+  s -> id = idinput;
+  s -> gpa = gpainput;
   list.push_back(s);
 
   return;
 }
 
-void print (vector<student>& list) {
-  for (vector<student>::iterator p = list.begin(); p != list.end(); ++p) {
-    cout << p->fname << " " << p->lname << ", ";
-    cout << p->id << ", ";
+void print (vector<student*>& list) {
+  for (vector<student*>::iterator p = list.begin(); p != list.end(); ++p) {
+    cout << (*p)->fname << " " << (*p)->lname << ", ";
+    cout << (*p)->id << ", ";
 
     cout.precision (3);
     cout.setf(ios::showpoint);
-    cout << p->gpa << endl;
+    cout << (*p)->gpa << endl;
   }
     cout << "PRINTED" << endl << endl;
 
   return;
 }
 
-void deletestudent (vector<student>& list) {
+void deletestudent (vector<student*>& list) {
   int input;
   
   cout << "Please enter ID of student to delete: ";
   cin >> input;
   
-  for (vector<student>::iterator p = list.begin(); p != list.end(); ++p) {
-    if (p->id == input) {
-      p = list.erase(p);
+  for (vector<student*>::iterator p = list.begin(); p != list.end(); ++p) {
+    if ((*p)->id == input) {
+      delete *p;
+      list.erase(p);
+      cout << "DELETED" << endl << endl;
+      
+      break;
+    }
+    else {
+      cout << "STUDENT DOES NOT EXIST" << endl << endl;
     }
   }
 
-  cout << "DELETED" << endl << endl;
+  
 
   return;
 }
