@@ -3,7 +3,12 @@
 #include <vector>
 #include <string.h>
 
-struct student {
+/* Student List: Read in students, print them out, and delete them.
+ * Author: Joyce Chen
+ * Date: 10/25/19
+ */
+
+struct student { // student data
   char fname[99];
   char lname[99];
   int id;
@@ -12,6 +17,7 @@ struct student {
 
 using namespace std;
 
+// declare methods
 void add(vector<student*>& list, char fnameinput[99], char lnameinput[99], int idinput,
 	 float gpainput);
 void print(vector<student*>& list);
@@ -25,39 +31,40 @@ int main() {
   float gpainput;
 
   char response[10];
-
   bool run = true;
 
+  // prompt user with commands
   cout << "To create a new entry for a student, type ADD" << endl;
   cout << "To see all students currently stored, type PRINT" << endl;
   cout << "To delete a student entry, type DELETE" << endl;
   cout << "To quit, type QUIT\n" << endl;
-  
-  while (run == true) {
+
+  while (run == true) { // while user has not quit yet
     cin >> response;
-    if (strcmp(response, "ADD") == 0) {
+    if (strcmp(response, "ADD") == 0) { // if add a student, run add function
       add(list, fnameinput, lnameinput, idinput, gpainput);
     }
-    else if (strcmp(response, "PRINT") == 0) {
+    else if (strcmp(response, "PRINT") == 0) { // if print students, run print function
       print(list);
     }
-    else if (strcmp(response, "DELETE") == 0) {
+    else if (strcmp(response, "DELETE") == 0) { // if delete student, run delete function
       deletestudent(list);
     }
-    else if (strcmp(response, "QUIT") == 0) {
+    else if (strcmp(response, "QUIT") == 0) { // if quit, set run to false
       run = false;
     }
-    else {
+    else { // if not a valid command, tell user
       cout << "Please enter a valid command (look above ^^)" << endl << endl;
     }
-    
   }
   
   return 0;
 }
 
+// to add a student
 void add (vector<student*>& list, char fnameinput[99], char lnameinput[99], int idinput,
 	  float gpainput) {
+  // ask and get student info
   cout << "Enter First Name: ";
   cin >> fnameinput;
   cout << "Enter Last Name: ";
@@ -68,6 +75,7 @@ void add (vector<student*>& list, char fnameinput[99], char lnameinput[99], int 
   cin >> gpainput;
   cout << "ADDED" << endl << endl;
 
+  // add student to vector list
   student *s = new student();
   strcpy(s -> fname, fnameinput);
   strcpy(s -> lname, lnameinput);
@@ -78,40 +86,40 @@ void add (vector<student*>& list, char fnameinput[99], char lnameinput[99], int 
   return;
 }
 
+// to print student list
 void print (vector<student*>& list) {
+  // run through vector list and print out student data
   for (vector<student*>::iterator p = list.begin(); p != list.end(); ++p) {
     cout << (*p)->fname << " " << (*p)->lname << ", ";
     cout << (*p)->id << ", ";
 
-    cout.precision (3);
+    // show gpa to only two decimal places
+    cout.precision (2);    
     cout.setf(ios::showpoint);
-    cout << (*p)->gpa << endl;
+    cout << fixed << (*p)->gpa << endl;
   }
     cout << "PRINTED" << endl << endl;
 
   return;
 }
 
+// to delete a student
 void deletestudent (vector<student*>& list) {
   int input;
   
   cout << "Please enter ID of student to delete: ";
   cin >> input;
-  
+
+  // run through vector and look for student with given id
   for (vector<student*>::iterator p = list.begin(); p != list.end(); ++p) {
-    if ((*p)->id == input) {
+    if ((*p)->id == input) { // if found, delete student data
       delete *p;
       list.erase(p);
       cout << "DELETED" << endl << endl;
       
       break;
     }
-    else {
-      cout << "STUDENT DOES NOT EXIST" << endl << endl;
-    }
   }
-
-  
 
   return;
 }
