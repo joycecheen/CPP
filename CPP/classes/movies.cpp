@@ -25,7 +25,7 @@ void movies::print() {
 movies::~movies() {
   delete[] title;
   delete[] director;
-  cout << "DELETED" << title << endl;
+  cout << "DELETED" << endl;
 }
 
 char* movies::getdirector() {

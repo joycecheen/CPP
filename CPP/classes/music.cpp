@@ -26,7 +26,7 @@ music::~music() {
   delete[] title;
   delete[] publisher;
   delete[] artist;
-  cout << "DELETED" << title << endl;
+  cout << "DELETED\n" << endl;
 }
 
 char* music::getartist() {

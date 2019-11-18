@@ -23,7 +23,7 @@ void videogames::print() {
 videogames::~videogames() {
   delete[] title;
   delete[] publisher;
-  cout << "DELETED" << title << endl;
+  cout << "DELETED\n" << endl;
 }
 
 char* videogames::getpublisher() {

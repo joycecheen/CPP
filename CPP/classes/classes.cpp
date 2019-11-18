@@ -6,8 +6,14 @@
 #include "movies.h"
 #include "media.h"
 
+/* Name: Joyce Chen
+ * Date: 11/18/19
+ * Classes- Create a database that includes video games, music, and movies  
+ */
+
 using namespace std;
 
+// function prototypes
 void addM(vector<media*> *medialist);
 void searchM(vector<media*> *medialist);
 void deleteM(vector<media*> *medialist);
@@ -17,50 +23,51 @@ int main() {
   char *response = new char(10);
   bool run = true;
 
+  // give user instructions
   cout << "To add a media, type ADD" << endl;
   cout << "To search for a media, type SEARCH" << endl;
   cout << "To delete a media, type DELETE" << endl;
   cout << "To quit, type QUIT\n" << endl;
-  
-  while (run == true) {
+
+  while (run == true) { // while user has not quit yet
     cin >> response;
-    if (strcmp(response, "ADD") == 0) {
+    if (strcmp(response, "ADD") == 0) { // if add media, run add function
       addM(medialist);
       medialist -> at(medialist -> size() - 1) -> print();
     }
-    else if (strcmp(response, "SEARCH") == 0) {
+    else if (strcmp(response, "SEARCH") == 0) { // if search media, run search function
       searchM(medialist);
     }
-    else if (strcmp(response, "DELETE") == 0) {
+    else if (strcmp(response, "DELETE") == 0) { // if delete media, run delete function
       deleteM(medialist);
     }
-    else if (strcmp(response, "QUIT") == 0) {
+    else if (strcmp(response, "QUIT") == 0) { // if quit, set run to false
       run = false;
     }
-    else {
+    else { // if not valid command, tell user
       cout << "Please enter a valid command (look above ^^)" << endl << endl;
     }
-    
   }
-  
   return 0;
 }
 
-void addM (vector<media*> *medialist) {
+void addM (vector<media*> *medialist) { // to add a media
   int type;
 
+  // ask and get media type
   cout << "To add a video game, type 1" << endl;
   cout << "To add music, type 2" << endl;
   cout << "To add a movie, type 3" << endl;
   cin >> type;
   cin.ignore();
 
-  if (type == 1) { // videogame
+  if (type == 1) { // add videogame
     char* title = new char(100);
     int year = 0;
     char* publisher = new char(100);
     float rating = 0;
 
+    // ask and get videogame info
     cout << "Enter Video Game Title: ";
     cin.getline(title, 100);
     cout << "Enter Video Game Year: ";
@@ -71,14 +78,15 @@ void addM (vector<media*> *medialist) {
     cout << "Enter Video Game Rating: ";
     cin >> rating;
     cin.ignore();
-    cout << endl;
 
+    // add videogame to vector medialist
     videogames *s = new videogames(title, year, publisher, rating);
     medialist -> push_back(s);
+    cout << "ADDED..." << endl;
 
     return; 
   }
-  else if (type == 2) { // music
+  else if (type == 2) { // add music
     char* title = new char(100);
     char* artist = new char(100);
     int year = 0;
@@ -103,7 +111,7 @@ void addM (vector<media*> *medialist) {
 
     return;
   }
-  else if (type == 3) { // movies
+  else if (type == 3) { // add movie
     char* title = new char(100);
     char* director = new char(100);
     int year = 0;
@@ -132,23 +140,23 @@ void addM (vector<media*> *medialist) {
 
 void searchM(vector<media*> *medialist) {
   char response[10];
+  int z = 0;
   
   cout << "To search by title, type TITLE" << endl;
   cout << "To search by year, type YEAR" << endl;
 
   cin >> response;
+  cin.ignore();
 
   if (strcmp(response, "TITLE") == 0) {
-    cout << "Input Title: ";
+    cout << "Input Title: " << endl;
     char* title = new char(100);
     cin.getline(title, 100);
     
     for (int i = 0; i < medialist -> size(); i++) {
       if (strcmp(medialist -> at(i) -> gettitle(), title) == 0) {
 	medialist -> at(i) -> print();
-      }
-      else {
-	cout << "NOTHING FOUND" << endl;
+	z++;
       }
     }
     
@@ -161,14 +169,16 @@ void searchM(vector<media*> *medialist) {
     for (int i = 0; i < medialist -> size(); i++) {
       if (medialist -> at(i) -> getyear() == year) {
 	medialist -> at(i) -> print();
-      }
-      else {
-	cout << "NOTHING FOUND" << endl;
+	z++;
       }
     }
   }
   else {
     cout << "To search, please type TITLE or YEAR" << endl;
+  }
+
+  if (z == 0) {
+    cout << "NOTHING FOUND\n" << endl;
   }
   
   return;
@@ -181,54 +191,64 @@ void deleteM(vector<media*> *medialist) {
   cout << "To delete by year, type YEAR" << endl;
 
   cin >> response;
+  cin.ignore();
 
   if (strcmp(response, "TITLE") == 0) {
     char response;
     char* title = new char(100);
+    int z = 0;
 
     cout << "Input Title: ";
     cin.getline(title, 100);
 
     for (int i = 0; i < medialist -> size(); i++) {
       if (strcmp(medialist -> at(i) -> gettitle(), title) == 0) {
-	cout << "Are you sure you want to delete , y/n: " << endl;
+	cout << "Are you sure you want to delete ... " << endl;
+	medialist -> at(i) -> print();
+	cout << "(y/n): ";
 	cin >> response;
 	if (response == 'y') {
 	  delete medialist -> at(i);
 	  medialist -> erase(medialist -> begin() + i);
-	  i--;
+	  break;
 	}
 	else if (response == 'n') {
 	  cout << "DELETION CANCELLED" << endl;
 	}
+	z++;
       }
-      else {
-	cout << "NOTHING FOUND" << endl;
+      if (z == 0) {
+	cout << "NOTHING FOUND\n" << endl;
       }
+      z++;
     }
   }
   else if (strcmp(response, "YEAR") == 0) {
     int year;
     char response;
+    int z = 0;
 
     cout << "Input Year: ";
     cin >> year;
 
     for (int i = 0; i < medialist -> size(); i++) {
       if (medialist -> at(i) -> getyear() == year) {
-	cout << "Are you sure you want to delete, y/n: " << endl;
+	cout << "Are you sure you want to delete ... " << endl << endl;
+	medialist -> at(i) -> print();
+	cout << "(y/n): ";
 	cin >> response;
 	if (response == 'y') {
 	  delete medialist -> at(i);
 	  medialist -> erase(medialist -> begin() + i);
-	  i--;
+	  break;
 	}
 	else if (response == 'n') {
 	  cout << "DELETION CANCELLED" << endl;
 	}
+	z++;
       }
-      else {
-	cout << "NOTHING FOUND" << endl;
+      if (z == 0) {
+	cout << "NOTHING FOUND\n" << endl;
       }
     }
   }  
