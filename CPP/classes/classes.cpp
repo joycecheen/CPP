@@ -93,6 +93,7 @@ void addM (vector<media*> *medialist) { // to add a media
     float duration = 0;
     char* publisher = new char(100);
 
+    // ask and get music info
     cout << "Enter Music Title: ";
     cin.getline(title, 100);
     cout << "Enter Music Artist: ";
@@ -106,6 +107,7 @@ void addM (vector<media*> *medialist) { // to add a media
     cin.getline(publisher, 100);
     cout << endl;
 
+    // add music to vector medialist
     music *s = new music(title, artist, year, duration, publisher);
     medialist -> push_back(s);
 
@@ -118,6 +120,7 @@ void addM (vector<media*> *medialist) { // to add a media
     float duration = 0;
     float rating = 0;
 
+    // ask and get movie info
     cout << "Enter Movie Title: ";
     cin.getline(title, 100);
     cout << "Enter Movie Director: ";
@@ -130,6 +133,7 @@ void addM (vector<media*> *medialist) { // to add a media
     cin >> rating;
     cout << endl;
 
+    // add movie to vector medialist
     movies *s = new movies(title, director, year, duration, rating);
     medialist -> push_back(s);
 
@@ -138,106 +142,107 @@ void addM (vector<media*> *medialist) { // to add a media
   return;
 }
 
-void searchM(vector<media*> *medialist) {
+void searchM(vector<media*> *medialist) { // to search for a media
   char response[10];
   int z = 0;
-  
+
+  // tell user directions to search 
   cout << "To search by title, type TITLE" << endl;
   cout << "To search by year, type YEAR" << endl;
 
   cin >> response;
   cin.ignore();
 
-  if (strcmp(response, "TITLE") == 0) {
+  if (strcmp(response, "TITLE") == 0) { // if search by title
     cout << "Input Title: " << endl;
-    char* title = new char(100);
-    cin.getline(title, 100);
+    char* title = new char(100); 
+    cin.getline(title, 100); // get title
     
-    for (int i = 0; i < medialist -> size(); i++) {
+    for (int i = 0; i < medialist -> size(); i++) { // run through media list and search for matching title
       if (strcmp(medialist -> at(i) -> gettitle(), title) == 0) {
 	medialist -> at(i) -> print();
-	z++;
+	z++; // add to found counter
       }
     }
     
   }
-  else if (strcmp(response, "YEAR") == 0) {
+  else if (strcmp(response, "YEAR") == 0) { // if search by year  
     cout << "Input Year: ";
     int year;
-    cin >> year;
+    cin >> year; // get year
 
-    for (int i = 0; i < medialist -> size(); i++) {
+    for (int i = 0; i < medialist -> size(); i++) { // run through media list and search for matching year
       if (medialist -> at(i) -> getyear() == year) {
 	medialist -> at(i) -> print();
-	z++;
+	z++; // add to found counter
       }
     }
   }
-  else {
+  else { // if user does not type TITLE or YEAR, tell them
     cout << "To search, please type TITLE or YEAR" << endl;
   }
 
-  if (z == 0) {
+  if (z == 0) { // if found counter is zero, so nothing found, tell user
     cout << "NOTHING FOUND\n" << endl;
   }
   
   return;
 }
 
-void deleteM(vector<media*> *medialist) {
+void deleteM(vector<media*> *medialist) { // to delete a media
   char response[10];
 
+  // tell user directions to delete
   cout << "To delete by title, type TITLE" << endl;
   cout << "To delete by year, type YEAR" << endl;
 
   cin >> response;
   cin.ignore();
 
-  if (strcmp(response, "TITLE") == 0) {
+  if (strcmp(response, "TITLE") == 0) { // if delete by title
     char response;
     char* title = new char(100);
     int z = 0;
 
     cout << "Input Title: ";
-    cin.getline(title, 100);
+    cin.getline(title, 100); // get title
 
-    for (int i = 0; i < medialist -> size(); i++) {
+    for (int i = 0; i < medialist -> size(); i++) { // run through media list and search for matching title
       if (strcmp(medialist -> at(i) -> gettitle(), title) == 0) {
-	cout << "Are you sure you want to delete ... " << endl;
+	cout << "Are you sure you want to delete ... " << endl; // ask user to confirm deletion
 	medialist -> at(i) -> print();
 	cout << "(y/n): ";
 	cin >> response;
-	if (response == 'y') {
+	if (response == 'y') { // if yes, procede with deletion
 	  delete medialist -> at(i);
 	  medialist -> erase(medialist -> begin() + i);
 	  break;
 	}
-	else if (response == 'n') {
+	else if (response == 'n') { // if no, cancel deletion
 	  cout << "DELETION CANCELLED" << endl;
 	}
-	z++;
+	z++; // add to found counter
       }
-      if (z == 0) {
+      if (z == 0) { // if found counter is zero, nothing was found, tell user
 	cout << "NOTHING FOUND\n" << endl;
       }
-      z++;
     }
   }
-  else if (strcmp(response, "YEAR") == 0) {
+  else if (strcmp(response, "YEAR") == 0) { // if delete by year
     int year;
     char response;
     int z = 0;
 
-    cout << "Input Year: ";
-    cin >> year;
+    cout << "Input Year: "; 
+    cin >> year; // get year
 
-    for (int i = 0; i < medialist -> size(); i++) {
+    for (int i = 0; i < medialist -> size(); i++) { // run through media list and search for matching year
       if (medialist -> at(i) -> getyear() == year) {
-	cout << "Are you sure you want to delete ... " << endl << endl;
+	cout << "Are you sure you want to delete ... " << endl << endl; // ask user to confirm deletion
 	medialist -> at(i) -> print();
 	cout << "(y/n): ";
 	cin >> response;
-	if (response == 'y') {
+	if (response == 'y') { // if yes, 
 	  delete medialist -> at(i);
 	  medialist -> erase(medialist -> begin() + i);
 	  break;
