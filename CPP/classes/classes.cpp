@@ -154,7 +154,7 @@ void searchM(vector<media*> *medialist) { // to search for a media
   cin.ignore();
 
   if (strcmp(response, "TITLE") == 0) { // if search by title
-    cout << "Input Title: " << endl;
+    cout << "Input Title: ";
     char* title = new char(100); 
     cin.getline(title, 100); // get title
     
