@@ -1,10 +1,15 @@
 #include <iostream>
 #include "media.h"
 
+/*
+ * Movies header file
+ */
+
 using namespace std;
 
-class movies : public media{
- public:
+class movies : public media{ // child of media
+ // public functions 
+ public:  
   movies(char* titleinput, char* directorinput, int year, float duration, float rating);
   char* getdirector();
   float getduration();
@@ -12,7 +17,7 @@ class movies : public media{
   ~movies();
   virtual void print();
 
- private:
+ private: // private variables unqiue to movies
   char* director;
   float duration;
   float rating;

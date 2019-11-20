@@ -3,10 +3,15 @@
 #ifndef MEDIA_H
 #define MEDIA_H
 
+/*
+ * Media header file
+ */
+
 using namespace std;
 
-class media {
+class media { // variables passed down to child classes
 
+ // public functions can be accessed anywhere outside the class within the program
  public:
   media(char* title, int year);
   virtual ~media();
@@ -16,6 +21,7 @@ class media {
   int getyear();
   int gettype();
 
+ // protected variables shared by all child classes, can be accessed in child classes  
  protected:
   char* title;
   int year;

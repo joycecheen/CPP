@@ -1,8 +1,13 @@
 #include <iostream>
 #include "movies.h"
 
+/*
+ * Movie (child) class and functions
+ */
+
 using namespace std;
 
+// constructor
 movies::movies(char* titleinput, char* directorinput, int yearinput, float durationinput, float ratinginput) : media(titleinput, yearinput) {
   type = 3;
   title = titleinput;
@@ -12,7 +17,8 @@ movies::movies(char* titleinput, char* directorinput, int yearinput, float durat
   rating = ratinginput;
 }
 
-void movies::print() {
+// print function
+void movies::print() { 
   cout << "Movie " << endl << "-------------" << endl;
   cout << "Title: " << title << endl;
   cout << "Director: " << director << endl;
@@ -22,12 +28,14 @@ void movies::print() {
   cout << endl;
 }
 
+// destructor
 movies::~movies() {
   delete[] title;
   delete[] director;
   cout << "DELETED" << endl;
 }
 
+// getters
 char* movies::getdirector() {
   return director;
 }

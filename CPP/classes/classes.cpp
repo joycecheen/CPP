@@ -223,7 +223,7 @@ void deleteM(vector<media*> *medialist) { // to delete a media
 	}
 	z++; // add to found counter
       }
-      if (z == 0) { // if found counter is zero, nothing was found, tell user
+      if (z == 0) { // if found counter is zero, nothing was found and tell user
 	cout << "NOTHING FOUND\n" << endl;
       }
     }
@@ -242,22 +242,22 @@ void deleteM(vector<media*> *medialist) { // to delete a media
 	medialist -> at(i) -> print();
 	cout << "(y/n): ";
 	cin >> response;
-	if (response == 'y') { // if yes, 
+	if (response == 'y') { // if yes, procede with deletion
 	  delete medialist -> at(i);
 	  medialist -> erase(medialist -> begin() + i);
 	  break;
 	}
-	else if (response == 'n') {
+	else if (response == 'n') { // if no, cancel deletion
 	  cout << "DELETION CANCELLED" << endl;
 	}
-	z++;
+	z++; // add to found counter
       }
-      if (z == 0) {
+      if (z == 0) { // if found counter is zero, nothing was found and tell user
 	cout << "NOTHING FOUND\n" << endl;
       }
     }
   }  
-  else {
+  else { // if user doesn't type TITLE or YEAR, tell user
     cout << "To delete, please type TITLE or YEAR" << endl;
   }
   
