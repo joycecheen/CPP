@@ -1,5 +1,9 @@
 #include <iostream>
 
+/*
+ * Node header file
+ */
+
 using namespace std;
 
 class node {
@@ -12,6 +16,6 @@ class node {
 
  private:
   student* student;
-  node* nextNode;
+  node* next;
   
 };
