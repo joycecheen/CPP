@@ -3,17 +3,18 @@
 
 using namespace std;
 
-node::node(student *newStudent) {
+node::node(student *newstudent) {
+  next = NULL;
   student = newStudent;
 }
 node* node::getNext() {
-  return node;
+  return next;
 }
 student* node::getStudent() {
   return student;
 }
 void node::setNext(node *setNode) {
-  nextNode = setNode;
+  next = setNode;
 }
 node::~node() {
   delete student;

@@ -27,7 +27,7 @@ float student::getgpa() {
   return gpa;
 }
 void student::printstudent() {
-  cout << "Name: " << fname << lname << endl;
+  cout << "Name: " << fname << " " << lname << endl;
   cout << "ID: " << id << endl;
 
   cout.precision (2);

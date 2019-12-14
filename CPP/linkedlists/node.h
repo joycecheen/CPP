@@ -1,13 +1,12 @@
-#include <iostream>
+#include "student.h"
 
 /*
  * Node header file
  */
 
-using namespace std;
-
 class node {
  public:
+  node(student newstudent);
   node *getNext();
   student* getStudent();
   void setNext(node*);
