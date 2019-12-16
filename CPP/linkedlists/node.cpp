@@ -1,9 +1,10 @@
 #include <iostream>
 #include "node.h"
+#include "student.h"
 
 using namespace std;
 
-node::node(student *newstudent) {
+node::node(new student *newStudent) {
   next = NULL;
   student = newStudent;
 }

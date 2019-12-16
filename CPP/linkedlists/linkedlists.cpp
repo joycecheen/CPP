@@ -28,7 +28,7 @@ int main() {
       int id;
       float gpa;
       
-      cout << "Enter1 First Name: ";
+      cout << "Enter First Name: ";
       cin >> fname;
       cout << "Enter Last Name: ";
       cin >> lname;
