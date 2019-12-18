@@ -248,7 +248,7 @@ void printOps (room *current, vector<objects*> *inventory) {
   }
 
   // print user inventory
-  cout << "┏ 　　　　　               ┐" << endl;
+  cout << "┏                          ┐" << endl;
   cout << "     I N V E N T O R Y      " << endl;
 
   if (inventory -> size() == 0) {
@@ -260,7 +260,7 @@ void printOps (room *current, vector<objects*> *inventory) {
     }
     cout << endl;
   }
-  cout << "└ 　　　　　               ┛" << endl << endl;
+  cout << "└                         ┛" << endl << endl;
 
   // print command options for user
   cout << "------------------------" << endl;

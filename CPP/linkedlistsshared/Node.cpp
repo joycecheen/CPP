@@ -5,17 +5,17 @@ using namespace std;
 
 Node::Node(Student *newStudent) {
   nextNode = NULL;
-  Student = newStudent;
+  student = newStudent;
 }
 Node* Node::getNext() {
   return nextNode;
 }
-student* Node::getStudent() {
-  return Student;
+Student* Node::getStudent() {
+  return student;
 }
 void Node::setNext(Node *setNode) {
   nextNode = setNode;
 }
 Node::~Node() {
-  delete Student;
+  delete student;
 }

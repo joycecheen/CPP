@@ -6,11 +6,11 @@ class Node {
   Node* getNext();
   Student* getStudent();
   void setNext(Node*);
-  Node(student*);
+  Node(Student*);
   ~Node();
 
  private:
-  Student* Student;
+  Student* student;
   Node* nextNode;
 
 };
