@@ -1,8 +1,9 @@
+#include <iostream>
+#include <stdlib.h>
+#include <time.h>
+
 /* 
  * Computer picks a random number 0-100 and the user will try to guess the number.
-
-
-
  * Author: Joyce Chen
  * Date: 9/12/2019
  */
