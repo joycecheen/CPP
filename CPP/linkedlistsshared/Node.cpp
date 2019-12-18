@@ -17,5 +17,5 @@ void Node::setNext(Node *setNode) {
   nextNode = setNode;
 }
 Node::~Node() {
-  delete student;
+  delete Student;
 }
