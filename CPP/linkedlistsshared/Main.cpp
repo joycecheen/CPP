@@ -15,9 +15,17 @@ int main() {
   int ID = 385533;
   float GPA = 1.00;
 
-  Student *s = new Student(firstName, lastName, ID, GPA);
-  Node* t = new Node(Student);
+  Student *t = new Student(firstName, lastName, ID, GPA);
 
+  if (node == NULL) {
+    Node* t = new Node(student);
+    head = t;
+  }
+  if (node -> getNext == NULL) {
+    Node* t = new Node(Student);
+    node -> set
+
+  }
   
 
 
