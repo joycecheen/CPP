@@ -1,20 +1,25 @@
 #include <iostream>
 #include <iomanip>
+
+// Student Functions
+
 #include "Student.h"
 
 using namespace std;
 
-Student::Student(char* firstInput, char* lastInput, int IDInput, float GPAInput) {
+Student::Student(char* firstInput, char* lastInput, int IDInput, float GPAInput) { // constructor
   firstName = firstInput;
   lastName = lastInput;
   ID = IDInput;
   GPA = GPAInput;
 }
-Student::~Student() {
+Student::~Student() { // destructor
   delete firstName;
   delete lastName;
 }
-char* Student::getFirst() {
+
+// getters
+char* Student::getFirst() { 
   return firstName;
 }
 char* Student::getLast() {
@@ -26,7 +31,8 @@ int Student::getID() {
 float Student::getGPA() {
   return GPA;
 }
-void Student::printStudent() {
+
+void Student::printStudent() { // print all student info
   cout << "Name: " << firstName << " " << lastName << endl;
   cout << "ID: " << ID << endl;
 
