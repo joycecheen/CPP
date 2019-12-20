@@ -5,13 +5,20 @@
 
 /* Name: Joyce Chen
  * Date: 12/19/19
- * Linked Lists Part 1: First part of student list using linked lists
+ * Linked Lists Part 2
  */
 
 using namespace std;
 
-int main() {
+void add(Node* &head, Node* node, Student* s);
+void print();
+void remove();
+float average();
 
+int main() {
+  
+  /* Linked Lists Part 1: First part of studentlist using linked lists 
+   *
   // node to keep track of next node in list
   Node* nextN = NULL;
 
@@ -39,6 +46,73 @@ int main() {
   nextN = nextN -> getNext();
   nextN -> getStudent() -> printStudent();
   cout << endl;
+  */
+
+  Node* head = NULL;
+  bool run = true;
+  char response[10];
+
+  cout << "To create a new entry for a student, type ADD" << endl;
+  cout << "To see all students currently stored, type PRINT" << endl;
+  cout << "To delete a student by ID, type DELETE" << endl;
+  cout << "To average GPA of all students, type AVERAGE" << endl;
+  cout << "To quit, type QUIT" << endl << endl;
+
+  while (run == true) {
+    cin >> response;
+    if (strcmp(response, "ADD") == 0) {
+      char* firstName = new char(99);
+      char* lastName = new char(99);
+      int ID = 0;
+      float GPA = 0;
+
+      cout << endl << "Enter Student Entry's First Name: ";
+      cin >> firstName;
+      cout << "Enter Student Entry's Last Name: ";
+      cin >> lastName;
+      cout << "Enter Student Entry's ID: ";
+      cin >> ID;
+      cout << "Enter Student Entry's GPA: ";
+      cin >> GPA;
+
+      Student *s = new Student(firstName, lastName, ID, GPA);
+      add(head, head, s);
+
+      cout << endl << "ADDED" << endl;
+    }
+    else if (strcmp(response, "PRINT") == 0) {
+
+    }
+    else if (strcmp(response, "DELETE") == 0) {
+
+    }
+    else if (strcmp(response, "AVERAGE") == 0) {
+
+    }
+    else if (strcmp(response, "QUIT") == 0) {
+
+    }
+    else {
+      cout << "Please enter a valid command, see above ^^" << endl;
+    }
+
+  }
+ 
 
   return 0;
+}
+
+void add (Node* &head, Node* node, Student* s) {
+
+  if (node == NULL) {
+    Node* sN = new Node(s);
+    head = sN;
+    return;
+  }
+  if (node -> getNext() == NULL) {
+    Node *sN = new Node(s);
+    node -> setNext(sN);
+    return;
+  }
+  add(head, node -> getNext(), s);
 }
