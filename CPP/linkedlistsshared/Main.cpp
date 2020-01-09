@@ -11,8 +11,8 @@
 using namespace std;
 
 void add(Node* &head, Node* node, Student* s);
-void print();
-void remove();
+void print(Node* node);
+void remove(int ID, Node* &head, Node* node);
 float average();
 
 int main() {
@@ -78,13 +78,21 @@ int main() {
       Student *s = new Student(firstName, lastName, ID, GPA);
       add(head, head, s);
 
-      cout << endl << "ADDED" << endl;
+      cout << endl << "ADDED" << endl << endl;
     }
     else if (strcmp(response, "PRINT") == 0) {
-
+      cout << endl;
+      print(head);
+      cout << endl << "PRINTED" << endl << endl;
     }
     else if (strcmp(response, "DELETE") == 0) {
+      int ID = 0;
+      cout << endl << "Please enter ID of student to delete: ";
+      cin >> ID;
 
+      remove(ID, head, head);
+
+      cout << endl << "DELETED" << endl << endl;
     }
     else if (strcmp(response, "AVERAGE") == 0) {
 
@@ -102,8 +110,7 @@ int main() {
   return 0;
 }
 
-void add (Node* &head, Node* node, Student* s) {
-
+void add(Node* &head, Node* node, Student* s) {
   if (node == NULL) {
     Node* sN = new Node(s);
     head = sN;
@@ -114,5 +121,34 @@ void add (Node* &head, Node* node, Student* s) {
     node -> setNext(sN);
     return;
   }
+
   add(head, node -> getNext(), s);
 }
+
+void print(Node* node) {
+  if (node == NULL) {
+    cout << "List is empty" << endl;
+    return;
+  }
+  node -> getStudent() -> printStudent();
+  cout << endl;
+  
+  print(node -> getNext());
+}
+
+void remove(int ID, Node* &head, Node* node) {
+  if ((node -> getStudent() -> getID() == ID) && (node == head)) {
+    Node* sN = head;
+    head = head -> getNext();
+    delete sN;
+    return;
+  }
+  if (node -> getNext() -> getStudent() -> getID() == ID) {
+    node -> setNext(node -> getNext() -> getNext());
+    delete node -> getNext();
+    return;
+  }
+  
+  remove(ID, head, node -> getNext());
+}
+
