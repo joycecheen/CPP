@@ -1,17 +1,25 @@
-#include "Student.h"
+#ifndef NODE_H
+#define NODE_H
+#include <iostream>
+#include <cstring>
+#include "student.h"
 
-// node header file
+using namespace std;
 
+//Variables and methods for the node class
 class Node {
-public: // public functions
-  Node* getNext(); // get next node pointer
-  Student* getStudent(); // get student pointer
-  void setNext(Node*); // set next pointer to corresponding node pointer
-  Node(Student*); // constructor
-  ~Node(); // destructor
-
-private: // private variables
+ public:
+  Node(Student* newStudent);
+  ~Node();
+  void setNext(Node* newnext);
+  Node* getNext();
+  void setStudent(Student* newStudent);
+  Student* getStudent();
+ private:
   Student* student;
-  Node* nextNode;
-
+  Node* next;
 };
+
+
+
+#endif 
