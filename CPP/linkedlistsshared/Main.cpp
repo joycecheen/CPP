@@ -1,6 +1,7 @@
 #include <iostream>
 #include <cstring>
-#include "Node.h"
+#include <iomanip>
+#include "node.h"
 #include "Student.h"
 
 /* Name: Joyce Chen
@@ -12,8 +13,8 @@ using namespace std;
 
 void add(Node* &head, Node* node, Student* s);
 void print(Node* node);
-void remove(int ID, Node* &head, Node* node);
-float average();
+void remove(Node* &head, Node* node, int ID);
+void average(Node* node, float sum, float count);
 
 int main() {
   
@@ -89,16 +90,18 @@ int main() {
       int ID = 0;
       cout << endl << "Please enter ID of student to delete: ";
       cin >> ID;
+      cin.ignore();
 
-      remove(ID, head, head);
+      remove(head, head, ID);
 
       cout << endl << "DELETED" << endl << endl;
     }
     else if (strcmp(response, "AVERAGE") == 0) {
-
+      average(head, 0, 0);
+      cout << endl << "AVERAGED" << endl << endl;
     }
     else if (strcmp(response, "QUIT") == 0) {
-
+      run = false;
     }
     else {
       cout << "Please enter a valid command, see above ^^" << endl;
@@ -113,12 +116,21 @@ int main() {
 void add(Node* &head, Node* node, Student* s) {
   if (node == NULL) {
     Node* sN = new Node(s);
+    sN -> setStudent(s);
     head = sN;
     return;
   }
-  if (node -> getNext() == NULL) {
+  if ((node -> getNext() == NULL)) {
     Node *sN = new Node(s);
+    sN -> setStudent(s);
     node -> setNext(sN);
+    return;
+  }
+  Node *student = new Node(s);
+  student -> setStudent(s);
+  else if (node -> getNext() -> getStudent() -> get ID() > student -> getStudent() -> getID()) {
+    student -> setNext(node -> getNext());
+    node -> setNext(student);
     return;
   }
 
@@ -127,20 +139,24 @@ void add(Node* &head, Node* node, Student* s) {
 
 void print(Node* node) {
   if (node == NULL) {
-    cout << "List is empty" << endl;
     return;
   }
+		  
   node -> getStudent() -> printStudent();
   cout << endl;
   
   print(node -> getNext());
 }
 
-void remove(int ID, Node* &head, Node* node) {
+void remove(Node* &head, Node* node, int ID) {
   if ((node -> getStudent() -> getID() == ID) && (node == head)) {
-    Node* sN = head;
+    Node* temp = head;
     head = head -> getNext();
-    delete sN;
+    cout << "One" << endl;
+    if (temp -> getStudent() != NULL) {
+      delete temp;
+    }
+    cout << "Two" << endl;
     return;
   }
   if (node -> getNext() -> getStudent() -> getID() == ID) {
@@ -149,6 +165,17 @@ void remove(int ID, Node* &head, Node* node) {
     return;
   }
   
-  remove(ID, head, node -> getNext());
+  remove(head, node -> getNext(), ID);
 }
 
+void average(Node* node, float sum, float count) {
+  if (node == NULL) {
+    cout << setprecision(2) << fixed;
+    cout << endl << (sum/count) << endl;
+    return;
+  }
+  sum += node -> getStudent() -> getGPA();
+  count++;
+
+  average(node->getNext(), sum, count);
+}
