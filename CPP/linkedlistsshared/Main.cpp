@@ -126,13 +126,14 @@ void add(Node* &head, Node* node, Student* s) {
     node -> setNext(sN);
     return;
   }
+  /*
   Node *student = new Node(s);
   student -> setStudent(s);
-  else if (node -> getNext() -> getStudent() -> get ID() > student -> getStudent() -> getID()) {
+  if (node -> getNext() -> getStudent() -> getID() > student -> getStudent() -> getID()) {
     student -> setNext(node -> getNext());
     node -> setNext(student);
     return;
-  }
+    }*/
 
   add(head, node -> getNext(), s);
 }
