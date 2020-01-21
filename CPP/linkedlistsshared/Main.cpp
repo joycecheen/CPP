@@ -11,7 +11,7 @@
 
 using namespace std;
 
-void add(Node* &head, Node* node, Student* s);
+void add(Node* prev, Node* &head, Node* node, Student* s);
 void print(Node* node);
 void remove(Node* &head, Node* node, int ID);
 void average(Node* node, float sum, float count);
@@ -67,6 +67,8 @@ int main() {
       int ID = 0;
       float GPA = 0;
 
+      Node* prev = NULL;
+
       cout << endl << "Enter Student Entry's First Name: ";
       cin >> firstName;
       cout << "Enter Student Entry's Last Name: ";
@@ -77,7 +79,7 @@ int main() {
       cin >> GPA;
 
       Student *s = new Student(firstName, lastName, ID, GPA);
-      add(head, head, s);
+      add(prev, head, head, s);
 
       cout << endl << "ADDED" << endl << endl;
     }
@@ -113,19 +115,36 @@ int main() {
   return 0;
 }
 
-void add(Node* &head, Node* node, Student* s) {
+void add(Node* prev, Node* &head, Node* node, Student* s) {
+  
+
   if (node == NULL) {
     Node* sN = new Node(s);
     sN -> setStudent(s);
     head = sN;
+    cout << "INSIDE 3" << endl;
     return;
   }
   if ((node -> getNext() == NULL)) {
     Node *sN = new Node(s);
     sN -> setStudent(s);
     node -> setNext(sN);
+    cout << "INSIDE 2" << endl;
     return;
   }
+  
+  Node* student = new Node(s);
+  student -> setStudent(s);
+  cout << "CURRENT" << node -> getNext() -> getStudent() -> getID() << endl;
+  cout << "students" << student -> getStudent() -> getID() << endl;
+  //prev -> getStudent() -> printStudent();
+  if ((node -> getNext() -> getStudent() -> getID()) > (student -> getStudent() -> getID())) {
+    node -> getNext() -> setNext(student);
+    student -> setNext(node -> getNext() -> getNext());
+    cout << "INSIDE 1" << endl;
+    return;
+  }  
+  
   /*
   Node *student = new Node(s);
   student -> setStudent(s);
@@ -135,7 +154,7 @@ void add(Node* &head, Node* node, Student* s) {
     return;
     }*/
 
-  add(head, node -> getNext(), s);
+  add(node, head, node -> getNext(), s);
 }
 
 void print(Node* node) {
