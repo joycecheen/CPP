@@ -117,19 +117,17 @@ int main() {
 
 void add(Node* prev, Node* &head, Node* node, Student* s) {
   
-  if (node == NULL) {
+  if (node == NULL) { // create head
     Node* temp = new Node(s);
     temp -> setStudent(s);
     head = temp;
-    cout << "create head" << endl;
     return;
   }
   
   Node * student = new Node(s);
   student -> setStudent(s);
   
-  if (student -> getStudent() -> getID() < head -> getStudent() -> getID()) {
-    cout << "create new head";
+  if (student -> getStudent() -> getID() < head -> getStudent() -> getID()) { // create new head
     Node* temp = head;
     head = new Node(s);
     head -> setStudent(s);
@@ -137,7 +135,7 @@ void add(Node* prev, Node* &head, Node* node, Student* s) {
     return;
   }
 
-  if ((node -> getNext() == NULL)) {
+  if ((node -> getNext() == NULL)) { // add at very end of list
     Node *temp = new Node(s);
     temp -> setStudent(s);
     node -> setNext(temp);
@@ -147,10 +145,9 @@ void add(Node* prev, Node* &head, Node* node, Student* s) {
   }
 
 
-  if ((node -> getStudent() -> getID() < student -> getStudent() -> getID()) && (student -> getStudent() -> getID() < node -> getNext() -> getStudent() -> getID())) {
+  if ((node -> getStudent() -> getID() < student -> getStudent() -> getID()) && (student -> getStudent() -> getID() < node -> getNext() -> getStudent() -> getID())) { // add between two nodes
     cout << node -> getStudent() -> getID() << endl;
     cout << node -> getNext() -> getStudent() -> getID() << endl;
-    cout << "add between";
     Node * temp = new Node(s);
     temp -> setStudent(s);
     temp -> setNext(node -> getNext());
