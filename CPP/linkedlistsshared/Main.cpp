@@ -117,42 +117,47 @@ int main() {
 
 void add(Node* prev, Node* &head, Node* node, Student* s) {
   
-
   if (node == NULL) {
-    Node* sN = new Node(s);
-    sN -> setStudent(s);
-    head = sN;
-    cout << "INSIDE 3" << endl;
+    Node* temp = new Node(s);
+    temp -> setStudent(s);
+    head = temp;
+    cout << "create head" << endl;
     return;
   }
+  
+  Node * student = new Node(s);
+  student -> setStudent(s);
+  
+  if (student -> getStudent() -> getID() < head -> getStudent() -> getID()) {
+    cout << "create new head";
+    Node* temp = head;
+    head = new Node(s);
+    head -> setStudent(s);
+    head -> setNext(temp);
+    return;
+  }
+
   if ((node -> getNext() == NULL)) {
-    Node *sN = new Node(s);
-    sN -> setStudent(s);
-    node -> setNext(sN);
-    cout << "INSIDE 2" << endl;
+    Node *temp = new Node(s);
+    temp -> setStudent(s);
+    node -> setNext(temp);
+    temp -> setNext(NULL);
+    cout << "add at end" << endl;
     return;
   }
-  
-  Node* student = new Node(s);
-  student -> setStudent(s);
-  cout << "CURRENT" << node -> getNext() -> getStudent() -> getID() << endl;
-  cout << "students" << student -> getStudent() -> getID() << endl;
-  //prev -> getStudent() -> printStudent();
-  if ((node -> getNext() -> getStudent() -> getID()) > (student -> getStudent() -> getID())) {
-    node -> getNext() -> setNext(student);
-    student -> setNext(node -> getNext() -> getNext());
-    cout << "INSIDE 1" << endl;
+
+
+  if ((node -> getStudent() -> getID() < student -> getStudent() -> getID()) && (student -> getStudent() -> getID() < node -> getNext() -> getStudent() -> getID())) {
+    cout << node -> getStudent() -> getID() << endl;
+    cout << node -> getNext() -> getStudent() -> getID() << endl;
+    cout << "add between";
+    Node * temp = new Node(s);
+    temp -> setStudent(s);
+    temp -> setNext(node -> getNext());
+    node -> setNext(temp);
     return;
-  }  
-  
-  /*
-  Node *student = new Node(s);
-  student -> setStudent(s);
-  if (node -> getNext() -> getStudent() -> getID() > student -> getStudent() -> getID()) {
-    student -> setNext(node -> getNext());
-    node -> setNext(student);
-    return;
-    }*/
+
+   }
 
   add(node, head, node -> getNext(), s);
 }
