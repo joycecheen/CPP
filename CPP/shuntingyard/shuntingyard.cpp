@@ -29,7 +29,6 @@ struct treeNode {
 };
 
 int main() {
-
   // give user instructions 
   cout << "- Welcome to Shunting Yard Algorithm -" << endl << endl;
   cout << "Use '+' for addition" << endl;
