@@ -11,9 +11,10 @@ using namespace std;
 
 // function prototypes
 void removeHead(stackNode * head);
-void addHead(stackNode * head, char newOperand);
+void addHead(stackNode * & head, char newOperand);
 void printPrefix(treeNode * parent);
 void printInfix(treeNode * parent);
+void printPostfix(treeNode * parent);
 
 struct stackNode {
   char operand;
@@ -72,6 +73,9 @@ int main() {
 	addHead(infix[a], head);
       }
       else if (infix[i] == ')') { // right paranthesis
+	
+      }
+      else {
 
       }
     }
@@ -80,4 +84,62 @@ int main() {
   
     
   return 0;
+}
+
+void removeHead(stackNode * & head) {
+  stackNode * temp = head -> next;
+  delete head;
+  head = temp;
+}
+
+void addHead(stackNode * & head, char newOperand) {
+  stackNode * temp = new stackNode();
+  temp -> operand = newOperand;
+  temp -> next = head;
+  head = temp;
+}
+
+void printPrefix(treeNode * parent) {
+  if (parent != NULL) {
+    if (parent -> isOperand == true) {
+      cout << parent -> operand << " ";
+    }
+    else {
+      cout << parent -> num << " ";
+    }
+    prefix(parent -> left);
+    prefix(parent -> right);
+  }
+}
+
+void printInfix(treeNode * parent) {
+  if (parent != NULL) {
+    if (parent -> isOperand == true) {
+      cout << "( ";
+    }
+    infix(parent -> left);
+    if (parent -> is Operand == true) {
+      cout << parent -> operand << " ";
+    }
+    else {
+      cout << parent -> number << " ";
+    }
+    infix(parent -> right);
+    if (parent -> isOperand == true) {
+      cout << ") ";
+    }
+  }
+}
+
+void printPostfix(treeNode * parent) {
+  if (parent != NULL) {
+    postfix(parent -> left);
+    postfix(parent -> right);
+    if (parent -> isOperand == true) {
+      cout << parent -> operand << " ";
+    }
+    else {
+      cout << parent -> number << " ";
+    }
+  }
 }
