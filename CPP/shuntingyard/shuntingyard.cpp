@@ -12,8 +12,8 @@ using namespace std;
 // function prototypes
 void removeHead(stackNode * head);
 void addHead(stackNode * head, char newOperand);
-void prefix(treeNode * parent);
-void infix(treeNode * parent);
+void printPrefix(treeNode * parent);
+void printInfix(treeNode * parent);
 
 struct stackNode {
   char operand;
@@ -23,7 +23,7 @@ struct stackNode {
 struct treeNode {
   char operand;
   int num;
-  bool isOp;
+  bool isOperand;
   treeNode * left;
   treeNode * right;
 };
@@ -42,26 +42,36 @@ int main() {
   head -> next = NULL;
   head -> operand = ' ';
 
-  stack<treeNode*> binaryTree;
+  stack<treeNode*> binaryTree; // binary tree
 
   char * infix = new char(100);
-  int c = 0;
+  int value = 0;
   cout << "Infix: ";
   cin.getline(infix, 100); // read in inifx notation
 
-  cout << "Postfix: ";
+  cout << "Postfix: "; // print inifx
   for (int i = 0; i < strlen(infix); i++)  { // run through
     if (infix[i] >= '1' && infix[i] <= '9') { 
-      c += initial; 
+      value = value * 10 + (infix[i] - '0');
     }
     else {
       if (infix[i] == ' ') { // empty space
-	
+	if (value > 0) {
+	  cout << value << " ";
+	  treeNode * number = new treeNode();
+	  number -> left = NULL;
+	  number -> right = NULL;
+	  number -> isOperand = false;
+	  number -> num = value;
+
+	  binaryTree.push(num);
+	}
+	value = 0;
       }
       else if (infix[i] == '(') { // left parantehsis
-
+	addHead(infix[a], head);
       }
-      else if (infix[i] == ')') { // righgt paranthesis
+      else if (infix[i] == ')') { // right paranthesis
 
       }
     }
