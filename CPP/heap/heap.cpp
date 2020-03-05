@@ -6,9 +6,19 @@
 
 using namespace std;
 
+/* Heap: Create a program that creates a heap. You should be able to enter a series of numers OR 
+ *       enter a filename, which contains a space-separated list of numbers, then the heap should 
+ *       then be able to remove each element in order from the heap, adding them to the output. 
+ *       The output will be from largest to smallest, since this is a max heap. Finally, you have a 
+ *       visual way to display your tree when it is full. 
+ * Name: Joyce Chen
+ * Date: 3/1/2020
+ */
+
 // i want to die ^.^
 
 void heap(int * array, int len, int i);
+void print(int * array);
 
 int main() {
   char input[10];
@@ -17,7 +27,7 @@ int main() {
   char * arrayC = new char[500];
   bool run = true;
 
-  while (run == true) {
+  while (run == true) { // while user has not quit
     cout << "Type TYPE to input by terminal line" << endl;
     cout << "Type FILE to input by file" << endl;
     cout << "Type QUIT to quit" << endl;
@@ -25,7 +35,7 @@ int main() {
     cin >> input;
     cin.ignore();
 
-    if (strcmp(input, "TYPE") == 0) {
+    if (strcmp(input, "TYPE") == 0) { // input through terminal
       cout << "Enter number of elements of array: ";
       cin >> num;
       cin.ignore();
@@ -109,7 +119,8 @@ int main() {
       cout << counter;*/
     }
   
-    /*else if (strcmp(input, "FILE") == 0) {
+    else if (strcmp(input, "FILE") == 0) {
+      /*
       char filename[20];
       cout << "Enter file name: ";
       cin.get(filename, 20);
@@ -123,7 +134,7 @@ int main() {
       }*/
   
     else if (strcmp(input , "QUIT") == 0) {
-      return 0;
+      run = false;
     }
   }
 
