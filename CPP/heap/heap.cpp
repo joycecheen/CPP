@@ -48,7 +48,7 @@ int main() {
 
       for (int i = 0; i < n; ++i) {
 	cout << array[i] << " ";
-      }
+       }
     }
   
     else if (strcmp(input, "FILE") == 0) {
@@ -132,12 +132,12 @@ void buildheap(int * array, int n) {
     heap(array, n, j);
   }
 
-  /*
-  for (int j = n - 1; j >= 0; j--) {
+  
+  /*for (int j = n - 1; j >= 0; j--) {
     swap(array[0], array[j]);
     heap(array, j, 0);
-  }
-  */
+  }*/
+  
 }
 
 void heap(int * array, int n, int x) {
