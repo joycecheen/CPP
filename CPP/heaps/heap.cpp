@@ -24,121 +24,108 @@ void heap(int * array, int n, int x);
 
 int main() {
   char input[10];
-  bool run = true;
   
   int array[100] = {};
   int output[100] = {};
-  int n = 0;
+  int n = 0; // keep track of array pos
   int b = 0;
   int o = 0;
   int depth = 0;
   
-  while (run == true) { // while user has not quit
-    cout << "Type TYPE to input by terminal line" << endl;
-    cout << "Type FILE to input by file" << endl;
-    cout << "Type QUIT to quit" << endl;
+  cout << "Type TYPE to input by terminal line" << endl;
+  cout << "Type FILE to input by file" << endl;
+  cout << "Type QUIT to quit" << endl;
 
-    cin >> input;
-    cin.ignore();
+  cin >> input;
+  cin.ignore();
 
-    if (strcmp(input, "TYPE") == 0) { // input through terminal
-      array[100] = {};
+  if (strcmp(input, "TYPE") == 0) { // input through terminal
+    array[100] = {};
       
-      cout << "enter number of inputs: ";
+    cout << "enter number of inputs: ";
+    cin >> n;
+    
+    while (n > 100) {
+      cout << "only up to 100 numbers can be stored: ";
       cin >> n;
-      for (int i = 0; i < n; i++) {
-	cout << "add number " << i+1 << ": ";
-	cin >> array[i];
-      }
-      buildheap(array, n);
-
-      cout << "maxheap: ";
-      for (int i = 0; i < n; i++) {
-	cout << array[i] << endl;
-      }
-
-      cout << endl;
-
-      visualize(array, 0, 0);
-      remove(array, output, o, n);
     }
+    
+    for (int i = 0; i < n; i++) {
+      cout << "add number " << i+1 << ": ";
+      cin >> array[i];
+    }
+    buildheap(array, n);
+
+    cout << endl;
+
+    visualize(array, 0, 0);
+    remove(array, output, o, n); 
+  }
   
-    else if (strcmp(input, "FILE") == 0) {
-      char * filename = new char[20];
-      string line;
-      char filedata[400] = {};
+  else if (strcmp(input, "FILE") == 0) {
+    char * filename = new char[20];
+    string line;
+    char filedata[400] = {};
+    array[100] = {};
       
-      cout << "Enter file name: ";
-      cin >> filename;
-      cin.get();
+    cout << "Enter file name: ";
+    cin >> filename;
+    cin.get();
 
       
-      // copy file data into char array
-      ifstream file (filename);
-      if (file.is_open()) {
-	while (getline (file, line)) {
-	  int a = 0;
-	  while (line[a] != 0) {
-	    filedata[a] = line[a];
-	    a++;
-	  }
+    // copy file data into char array
+    ifstream file (filename);
+    if (file.is_open()) {
+      while (getline (file, line)) {
+	int a = 0;
+	while (line[a] != 0) {
+	  filedata[a] = line[a];
+	  a++;
 	}
-	file.close();
       }
-      else {
-	cout << "cannot open file" << endl;
+      file.close();
+    }
+    else {
+      cout << "cannot open file" << endl;
+    }
+
+    for (int i = 0; i < 400; i++) {
+      if (filedata[i] == '\0') {
+	break;
       }
+      if (n < 100) {
+	if (filedata[i] >= 48 && filedata[i] <= 57) {
+	  int num = filedata[i] - '0';
 
-      cout << "filedata: " << filedata << endl;
-      int n = 0; // keep track of array pos
-
-      for (int i = 0; i < 400; i++) {
-	if (filedata[i] == '\0') {
-	  break;
-	}
-	if (n < 100) {
-	  if (filedata[i] >= 48 && filedata[i] <= 57) {
-	    cout << "char " << i << ": "<< filedata[i] << endl;
-	    int num = filedata[i] - '0';
-	    cout << "int: " << num << endl;
-
-	    while(filedata[i+1] >= 48 && filedata[i+1] <= 57) { // multi digit num
-	      cout << "multi";
-	      int temp = filedata[i+1] - '0';
-	      num = (num * 10) + temp;
-	      i++;
-	    } 
+	  while(filedata[i+1] >= 48 && filedata[i+1] <= 57) { // multi digit num
+	    int temp = filedata[i+1] - '0';
+	    num = (num * 10) + temp;
+	    i++;
+	  } 
 	    
-	    array[n] = num;
-	    n++;
-	  }
+	  array[n] = num;
+	  n++;
 	}
       }
+    }
 
-      for (int i = 0; i < n; i++) {
-	cout << array[i] << " ";
-      }
+    buildheap(array, n);
 
-      buildheap(array, n);
-
-      visualize(array, 0, 0);
+    visualize(array, 0, 0);
       
-      cout << endl;
-      remove(array, output, o, n);
-      cout << endl;
-    }
+    cout << endl;
+    remove(array, output, o, n);
+    cout << endl;
+  }
   
-    else if (strcmp(input , "QUIT") == 0) {
-      run = false;
-    }
+  else if (strcmp(input , "QUIT") == 0) {
+    return 0;
   }
 
   return 0;
 }
 
 void remove(int * array, int * output, int o, int n) {
-  int left = (2 * n) + 1;
-  int right = (2 * n) + 2;
   
   while (array[0] != 0) {
     int z = 0;
@@ -156,7 +143,9 @@ void remove(int * array, int * output, int o, int n) {
     n = 0;
     o++;
     
-    while ((array[n] < array[left] || array[n] < array[right]) && (array[n] != 0)) {
+    while ((array[n] < array[(2*n)+1] || array[n] < array[(2*n)+2]) && (array[n] != 0)) {
+      int left = (2 * n) + 1;
+      int right = (2 * n) + 2;
       //sort array
       if (array[right] < array[left]) {
 	//if the left child is larger, swap
@@ -175,30 +164,19 @@ void remove(int * array, int * output, int o, int n) {
     }
   }
 
-  int p = 0;
-  while (output[p] != 0){
-    cout << output[p] << " ";
-    output[p] = 0;
-    p++;
+  cout << "Output (Max -> Min): ";
+  
+  for (int j = 0; j < 100; j++) {
+    if (output[j] != 0) {
+      cout << output[j] << " ";
+      output[j] = 0;
+    } 
   }
-  cout << endl;  
+  
+  cout << endl;
 }
 
 void visualize(int * array, int depth, int n) {
-  /*if (depth == 3) {
-    return;
-  }
-  if (array[(2*n)+1] != 0) {
-    visualize(array, depth++, (2*n)+1);
-  }
-  for (int i = 0; i < depth; i++) {
-    cout << '\t';
-  }
-  cout << array[n] << endl;
-  if (array[(2*n)] != 0) {
-    visualize(array, depth++, n*2);
-  }*/
-  //depth+ = COUNT;
   if (array[(2*n)+2] != 0){ //if right child is not null
     visualize(array, depth+1, (2*n)+2);
   }
@@ -212,29 +190,10 @@ void visualize(int * array, int depth, int n) {
   }
 }
 
-/*
-void print(int * array, int depth) {
-  if (array != NULL) {
-    print(array -> right, depth++)
-  }
-  for(i < depth) {
-    cout << '\t';
-  }
-  cout << array -> value;
-  if (left != NULL) {
-    print(array -> left, depth++);
-  }
-  }*/
-
 void buildheap(int * array, int n) {
   for (int j = n / 2 - 1; j >= 0; j--) {
     heap(array, n, j);
   }
-
-  /*for (int j = n - 1; j >= 0; j--) {
-    swap(array[0], array[j]);
-    heap(array, j, 0);
-  }*/
   
 }
 
