@@ -26,8 +26,8 @@ struct node{
 void insert(node * root, int value);
 void remove(node * & deleted);
 void search(node * root, int value);
-void remove(node * root, int space);
-void convert(char * chardata, int * intdata, int n);
+void print(node * root, int spaces);
+int convert(char * chardata, int * intdata);
 
 int main() {
   bool run = true;
@@ -44,6 +44,7 @@ int main() {
   cout << "type QUIT to quit" << endl << endl;
 
   node * root = new node();
+  //node * current = new node();
   
   while (run == true) {
     cin >> userinput;
@@ -62,9 +63,11 @@ int main() {
 	cout << "Input: "; 
 	cin.get(chardata, 100);
 
-	//finish
+	n = convert(chardata, intdata);
 
-	convert(chardata, intdata, n);
+	for (int i = 0; i < n; i++) {
+	  insert(root, intdata[i]);
+	}
 
 	//insert(root, value)
       }
@@ -94,8 +97,11 @@ int main() {
 	  cout << "cannot open file" << endl;
 	}
 	
-	convert(chardata, intdata, n);
-	
+	n = convert(chardata, intdata);
+
+	for (int i = 0; i < n; i++) {
+	  insert(root, intdata[i]);
+	}
 	//insert(root, value);
       }
     }
@@ -109,7 +115,7 @@ int main() {
     }
 	
     else if (strcmp(userinput, "PRINT") == 0) {
-
+      print(root, 0);
     }
 	
     else if (strcmp(userinput, "QUIT") == 0) {
@@ -126,7 +132,35 @@ int main() {
 }
 
 void insert(node * root, int value) {
-  
+  if (root -> value == 0) {
+    root -> value = value;
+    return;
+  }
+  if (root -> value < value) {
+    if (root -> right == NULL) {
+      node * right = new node();
+      right -> value = value;
+      right -> left = NULL;
+      right -> right = NULL;
+      right -> parent = root;
+
+      root -> right = right;
+      return;
+    }
+    insert(root -> right, value);
+  }
+  else { // if no left node, input node at left
+    if (root -> left == NULL) {
+      node * left = new node();
+      left -> value = value;
+      left -> left = NULL;
+      left -> right = NULL;
+      left -> parent = root;
+      root -> left = left;
+      return;
+    }
+    insert(root -> left, value);
+  }
 }
 
 void remove(node * & deleted) {
@@ -137,26 +171,50 @@ void search(node * root, int value) {
 
 }
 
-void remove(node * root, int space) {
-
+void print(node * root, int spaces) {
+  if (root != NULL && root -> value == 0) {
+    cout << "tree has no nodes" << endl;
+  }
+  if (root == NULL || root -> value == 0) {
+    return;
+  }
+  print(root -> right, spaces + 1);
+  for (int t = 0; t < spaces; t++) {
+    cout << "\t";
+  }
+  cout << root -> value << endl;
+  print(root -> left, spaces + 1);
 }
 
-void convert(char * chardata, int * intdata, int n) {
+int convert(char * chardata, int * intdata) {
+  int n = 0;
   for (int i = 0; i < strlen(chardata); i++) {
-    if (chardata[i] == 0) {
-      break;
-    }
     if (chardata[i] >= 48 && chardata[i] <= 57) { // add to int array if char is a num
       int num = chardata[i] - '0';
 
       while(chardata[i+1] >= 48 && chardata[i+1] <= 57) { // multi digit num
-	int temp = chardata[i+1] - '0';
-	num = (num * 10) + temp;
+	int tempI = chardata[i+1] - '0';
+	num = (num * 10) + tempI;
 	i++;
       }
 
       intdata[n] = num; // add
       n++;
     }
+    
+    /*
+    if (current == NULL) { // if tree is empty
+      node * temp = new node();
+      temp -> value = num;
+      //temp -> right = NULL;
+      //remp -> left = NULL;
+      root = temp;
+      current = temp;
+      }*/
+
+    
+    
   }
+  
+  return n;
 }
