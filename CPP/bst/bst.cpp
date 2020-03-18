@@ -1,6 +1,7 @@
 #include <iostream>
 #include <stdlib.h>
 #include <cstring>
+#include <fstream>
 
 using namespace std;
 
@@ -26,13 +27,14 @@ void insert(node * root, int value);
 void remove(node * & deleted);
 void search(node * root, int value);
 void remove(node * root, int space);
-void convert(char * chardata, int * intdata);
+void convert(char * chardata, int * intdata, int n);
 
 int main() {
   bool run = true;
   char userinput[10];
-  int intdata[100];
-  char chardata[100];
+  int intdata[100] = {};
+  char chardata[100] = {};
+  int n = 0;
   
   cout << "- Welcome to Binary Search Tree -" << endl;
   cout << "type INSERT to insert" << endl;
@@ -48,28 +50,28 @@ int main() {
     cin.ignore();
     
     if (strcmp(userinput, "INSERT") == 0) {
-      char userT[10];
+      char inputT[10];
       cout << "Type TYPE to input by terminal line" << endl;
       cout << "Type FILE to input by file" << endl;
       cin >> inputT;
       cin.ignore();
 
-      if (strcmp(input, "TYPE") == 0) { // input through terminal
+      if (strcmp(inputT, "TYPE") == 0) { // input through terminal
 	intdata[100] = {}; // clear array
 
 	cout << "Input: "; 
-	cin.getline(chardata, 100);
+	cin.get(chardata, 100);
 
 	//finish
 
-	convert(chardata, intdata);
-	insert(root, value)
+	convert(chardata, intdata, n);
+
+	//insert(root, value)
       }
 
-      else if (strcmp(input, "FILE") == 0) { // input through file
+      else if (strcmp(inputT, "FILE") == 0) { // input through file
 	char filename[20] = {};
 	string line;
-	filedata[100] = {};
 	intdata[100] = {};
 
 	cout << "Enter file name: "; // get file name
@@ -82,7 +84,7 @@ int main() {
 	  while (getline (file, line)) {
 	    int a = 0;
 	    while (line[a] != 0) {
-	      intdata[a] = line[a];
+	      chardata[a] = line[a];
 	      a++;
 	    }
 	  }
@@ -92,8 +94,9 @@ int main() {
 	  cout << "cannot open file" << endl;
 	}
 	
-	convert(chardata, intdata);
-	insert(root, value);
+	convert(chardata, intdata, n);
+	
+	//insert(root, value);
       }
     }
 	
@@ -138,24 +141,22 @@ void remove(node * root, int space) {
 
 }
 
-void convert(char * chardata, int * intdata) {
-  for (int i = 0; i < 400; i++) {
-    if (filedata[i] == 0) {
+void convert(char * chardata, int * intdata, int n) {
+  for (int i = 0; i < strlen(chardata); i++) {
+    if (chardata[i] == 0) {
       break;
     }
-    if (n < 100) { // up to 100 stored numbers
-      if (filedata[i] >= 48 && filedata[i] <= 57) { // add to int array if char is a num
-	int num = filedata[i] - '0';
+    if (chardata[i] >= 48 && chardata[i] <= 57) { // add to int array if char is a num
+      int num = chardata[i] - '0';
 
-	while(filedata[i+1] >= 48 && filedata[i+1] <= 57) { // multi digit num
-	  int temp = filedata[i+1] - '0';
-	  num = (num * 10) + temp;
-	  i++;
-	}
-
-	intdata[n] = num; // add
-	n++;
+      while(chardata[i+1] >= 48 && chardata[i+1] <= 57) { // multi digit num
+	int temp = chardata[i+1] - '0';
+	num = (num * 10) + temp;
+	i++;
       }
+
+      intdata[n] = num; // add
+      n++;
     }
   }
 }
