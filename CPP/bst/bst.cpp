@@ -25,7 +25,7 @@ struct node{
 
 void insert(node * root, int value);
 void remove(node * & deleted);
-void search(node * root, int value);
+bool search(node * root, int s);
 void print(node * root, int spaces);
 int convert(char * chardata, int * intdata);
 
@@ -111,7 +111,17 @@ int main() {
     }
 	
     else if (strcmp(userinput, "SEARCH") == 0) {
+      int s = 0;
+      
+      cout << "Value to search for: ";
+      cin >> s;
 
+      if (search(root, s) == true) {
+	cout << s << " is in the tree" << endl;
+      }
+      else {
+	cout << s << " is not in the tree" << endl;
+      }
     }
 	
     else if (strcmp(userinput, "PRINT") == 0) {
@@ -167,8 +177,19 @@ void remove(node * & deleted) {
 
 }
 
-void search(node * root, int value) {
-
+bool search(node * root, int s) {
+  if (root == NULL) {
+    return false;
+  }
+  else if (root -> value == s) {
+    return true;
+  }
+  else if (root -> value > s) {
+    return search(root -> left, s);
+  }
+  else if (root -> value < s) {
+    return search(root -> right, s);
+  }
 }
 
 void print(node * root, int spaces) {
