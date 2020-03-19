@@ -23,6 +23,7 @@ struct node{
   int value;
 };
 
+// function prototypes
 void insert(node * root, int value);
 void remove(node * & d);
 bool search(node * root, int s);
@@ -47,13 +48,12 @@ int main() {
   cout << "type QUIT to quit" << endl << endl;
 
   node * root = new node();
-  //node * current = new node();
   
   while (run == true) {
     cin >> userinput;
     cin.ignore();
     
-    if (strcmp(userinput, "INSERT") == 0) {
+    if (strcmp(userinput, "INSERT") == 0) { // add number to tree
       char inputT[10];
       cout << "Type TYPE to input by terminal line" << endl;
       cout << "Type FILE to input by file" << endl;
@@ -61,14 +61,14 @@ int main() {
       cin.ignore();
 
       if (strcmp(inputT, "TYPE") == 0) { // input through terminal
-	intdata[100] = {}; // clear array
+	intdata[100] = {};
 
 	cout << "Input: "; 
 	cin.get(chardata, 100);
 
 	n = convert(chardata, intdata);
 
-	for (int i = 0; i < n; i++) {
+	for (int i = 0; i < n; i++) { // insert
 	  insert(root, intdata[i]);
 	}
       }
@@ -99,23 +99,23 @@ int main() {
 	
 	n = convert(chardata, intdata);
 
-	for (int i = 0; i < n; i++) {
+	for (int i = 0; i < n; i++) { // insert
 	  insert(root, intdata[i]);
 	}	
       }
     }
 	
-    else if (strcmp(userinput, "REMOVE") == 0) {
+    else if (strcmp(userinput, "REMOVE") == 0) { // remove from tree
       int value = 0;
 
       cout << "Value to delete: ";
       cin >> value;
 
-      node * d = find(root, value);
+      node * d = find(root, value); // find node with value to delete
       remove(d);
     }
 	
-    else if (strcmp(userinput, "SEARCH") == 0) {
+    else if (strcmp(userinput, "SEARCH") == 0) { // search tree
       int s = 0;
       
       cout << "Value to search for: ";
@@ -129,11 +129,11 @@ int main() {
       }
     }
 	
-    else if (strcmp(userinput, "PRINT") == 0) {
+    else if (strcmp(userinput, "PRINT") == 0) { // print tree
       print(root, 0);
     }
 	
-    else if (strcmp(userinput, "QUIT") == 0) {
+    else if (strcmp(userinput, "QUIT") == 0) { // quit
       run = false;
     }
 	
@@ -146,13 +146,14 @@ int main() {
   return 0;
 }
 
+// insert number(s) into tree
 void insert(node * root, int value) {
-  if (root -> value == 0) {
+  if (root -> value == 0) { // no nodes in tree
     root -> value = value;
     return;
   }
-  if (root -> value < value) {
-    if (root -> right == NULL) {
+  if (root -> value < value) { // if value is greater, goes on right
+    if (root -> right == NULL) { // no right node
       node * right = new node();
       right -> value = value;
       right -> left = NULL;
@@ -162,7 +163,7 @@ void insert(node * root, int value) {
       root -> right = right;
       return;
     }
-    insert(root -> right, value);
+    insert(root -> right, value); // else transverse to right 
   }
   else { // if no left node, input node at left
     if (root -> left == NULL) {
@@ -174,38 +175,39 @@ void insert(node * root, int value) {
       root -> left = left;
       return;
     }
-    insert(root -> left, value);
+    insert(root -> left, value); // else transverse to left
   }
 }
 
+// logic of remove function (Hibbard delete algorithm) from: http://www.mathcs.emory.edu/~cheung/Courses/171/Syllabus/9-BinTree/BST-delete.html
 void remove(node * & d) {
   if (d == NULL) { // return if not in tree
     return;
   }
   // case 1: node has no children
   if (d -> left == NULL && d -> right == NULL) { 
-    if (d -> parent == NULL) {
+    if (d -> parent == NULL) { // if parent, set node to null
       d -> value = 0;
       return;
     }
-    if (d -> value <= d -> parent -> value) {
-      d -> parent -> left = NULL;
+    if (d -> value <= d -> parent -> value) { // if node is on left of tree
+      d -> parent -> left = NULL; // set left to null
     }
-    else {
-      d -> parent -> right = NULL;
+    else { // if on right of tree
+      d -> parent -> right = NULL; // set right to null
     }
     delete d;
     d = NULL;
   }
   // case 2: node has one child
   else if (d -> left == NULL || d -> right == NULL) {
-    if (d -> left == NULL) {
-      node * temp = d -> right;
-      if (d -> parent == NULL) {
-	d -> value = temp -> value;
+    if (d -> left == NULL) { // if child is on right
+      node * temp = d -> right; 
+      if (d -> parent == NULL) { // if root node, transfer right child data
+	d -> value = temp -> value; 
 	d -> right = temp -> right;
 	d -> left = temp -> left;
-	if (temp -> left != NULL) {
+	if (temp -> left != NULL) { 
 	  temp -> left -> parent = d;
 	}
 	if (temp -> right != NULL) {
@@ -213,7 +215,7 @@ void remove(node * & d) {
 	}
 	delete temp;
       }
-      else {
+      else { // delete d and make right child new parent
 	node * temP = d -> parent;
 	delete d;
 	if (temp -> value <= temP -> value) {
@@ -223,11 +225,11 @@ void remove(node * & d) {
 	  temP -> right = temp;
 	}
 	temp -> parent = temP;
-      }
+	}
     }
-    else {
+    else { // if child is on left
       node * temp = d -> left;
-      if (d -> parent == NULL) {
+      if (d -> parent == NULL) { // if root node, transfer left child data
 	d -> value = temp -> value;
 	d -> right = temp -> right;
 	d -> left = temp -> left;
@@ -239,7 +241,7 @@ void remove(node * & d) {
 	}
 	delete temp;
       }
-      else {
+      else { // delete d and make left child new parent
 	node * temP = d -> parent;
 	delete d;
 	if (temp -> value <= temP -> value) {
@@ -250,16 +252,16 @@ void remove(node * & d) {
 	}
 	temp -> parent = temP;
       }
-    }
+    } 
   }
   // case 3: node has two children
   else {
     node * s;
-    if (d -> right != NULL) {    
-      s = findSR(d -> right);
+    if (d -> right != NULL) { // replace node's value w smallest node    
+      s = findSR(d -> right); // found on right of tree
     }
-    else {
-      s = findSL(d -> left);
+    else { // replace node's value with largest node
+      s = findSL(d -> left); // found on left of tree
     }
     int value = s -> value;
     remove(s);
@@ -284,8 +286,9 @@ bool search(node * root, int s) { // iterative search
   return false;
 }
 
+// print tree showing parent child relationships
 void print(node * root, int spaces) {
-  if (root != NULL && root -> value == 0) {
+  if (root != NULL && root -> value == 0) { 
     cout << "tree has no nodes" << endl;
   }
   if (root == NULL || root -> value == 0) {
@@ -299,6 +302,7 @@ void print(node * root, int spaces) {
   print(root -> left, spaces + 1);
 }
 
+// turn read in char arr into int arr, also return number of values
 int convert(char * chardata, int * intdata) {
   int n = 0;
   for (int i = 0; i < strlen(chardata); i++) {
@@ -310,9 +314,10 @@ int convert(char * chardata, int * intdata) {
 	num = (num * 10) + tempI;
 	i++;
       }
-
-      intdata[n] = num; // add
-      n++;
+      if ((num < 1000) && (num > 0)) {
+	intdata[n] = num; // add to int arr
+	n++;
+      }
     }
     
   }
@@ -320,6 +325,7 @@ int convert(char * chardata, int * intdata) {
   return n;
 }
 
+// find node with given value (used for remove function)
 node* find(node * root, int value) {
   if (root == NULL || root -> value == value) {
     return root;
@@ -330,7 +336,7 @@ node* find(node * root, int value) {
   return find(root -> right, value);
 }
 
-//used to find the smallest node on the right side of tree
+// find the smallest node on the right side of tree
 node* findSR(node * root) {
   if (root -> left == NULL) {
     return root;
@@ -339,7 +345,7 @@ node* findSR(node * root) {
   return findSR(root->left);
 }
 
-//used to find the largest node on the left side of tree
+// find the largest node on the left side of tree
 node* findSL(node * root) {
   if (root -> right == NULL) {
     return root;
