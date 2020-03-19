@@ -24,10 +24,13 @@ struct node{
 };
 
 void insert(node * root, int value);
-void remove(node * & deleted);
+void remove(node * & d);
 bool search(node * root, int s);
 void print(node * root, int spaces);
 int convert(char * chardata, int * intdata);
+node* find(node * root, int value);
+node* findSL(node * root);
+node* findSR(node * root);
 
 int main() {
   bool run = true;
@@ -68,10 +71,7 @@ int main() {
 	for (int i = 0; i < n; i++) {
 	  insert(root, intdata[i]);
 	}
-
-	//insert(root, value)
       }
-
       else if (strcmp(inputT, "FILE") == 0) { // input through file
 	char filename[20] = {};
 	string line;
@@ -101,13 +101,18 @@ int main() {
 
 	for (int i = 0; i < n; i++) {
 	  insert(root, intdata[i]);
-	}
-	//insert(root, value);
+	}	
       }
     }
 	
     else if (strcmp(userinput, "REMOVE") == 0) {
+      int value = 0;
 
+      cout << "Value to delete: ";
+      cin >> value;
+
+      node * d = find(root, value);
+      remove(d);
     }
 	
     else if (strcmp(userinput, "SEARCH") == 0) {
@@ -173,23 +178,110 @@ void insert(node * root, int value) {
   }
 }
 
-void remove(node * & deleted) {
-
+void remove(node * & d) {
+  if (d == NULL) { // return if not in tree
+    return;
+  }
+  // case 1: node has no children
+  if (d -> left == NULL && d -> right == NULL) { 
+    if (d -> parent == NULL) {
+      d -> value = 0;
+      return;
+    }
+    if (d -> value <= d -> parent -> value) {
+      d -> parent -> left = NULL;
+    }
+    else {
+      d -> parent -> right = NULL;
+    }
+    delete d;
+    d = NULL;
+  }
+  // case 2: node has one child
+  else if (d -> left == NULL || d -> right == NULL) {
+    if (d -> left == NULL) {
+      node * temp = d -> right;
+      if (d -> parent == NULL) {
+	d -> value = temp -> value;
+	d -> right = temp -> right;
+	d -> left = temp -> left;
+	if (temp -> left != NULL) {
+	  temp -> left -> parent = d;
+	}
+	if (temp -> right != NULL) {
+	  temp -> right -> parent = d;
+	}
+	delete temp;
+      }
+      else {
+	node * temP = d -> parent;
+	delete d;
+	if (temp -> value <= temP -> value) {
+	  temP -> left = temp;
+	}
+	else {
+	  temP -> right = temp;
+	}
+	temp -> parent = temP;
+      }
+    }
+    else {
+      node * temp = d -> left;
+      if (d -> parent == NULL) {
+	d -> value = temp -> value;
+	d -> right = temp -> right;
+	d -> left = temp -> left;
+	if (temp -> left != NULL) {
+	  temp -> left -> parent = d;
+	}
+	if (temp -> right != NULL) {
+	  temp -> right -> parent = d;
+	}
+	delete temp;
+      }
+      else {
+	node * temP = d -> parent;
+	delete d;
+	if (temp -> value <= temP -> value) {
+	  temP -> left = temp;
+	}
+	else {
+	  temP -> right = temp;
+	}
+	temp -> parent = temP;
+      }
+    }
+  }
+  // case 3: node has two children
+  else {
+    node * s;
+    if (d -> right != NULL) {    
+      s = findSR(d -> right);
+    }
+    else {
+      s = findSL(d -> left);
+    }
+    int value = s -> value;
+    remove(s);
+    d -> value = value;
+  }
 }
 
-bool search(node * root, int s) {
-  if (root == NULL) {
-    return false;
+// search function from geeksforgeeks:
+// https://www.geeksforgeeks.org/iterative-searching-binary-search-tree/
+bool search(node * root, int s) { // iterative search
+  while (root != NULL) {
+    if (root -> value < s) {
+      root = root -> right;
+    }
+    else if (root -> value > s) {
+      root = root -> left;
+    }
+    else {
+      return true;
+    }
   }
-  else if (root -> value == s) {
-    return true;
-  }
-  else if (root -> value > s) {
-    return search(root -> left, s);
-  }
-  else if (root -> value < s) {
-    return search(root -> right, s);
-  }
+  return false;
 }
 
 void print(node * root, int spaces) {
@@ -223,19 +315,35 @@ int convert(char * chardata, int * intdata) {
       n++;
     }
     
-    /*
-    if (current == NULL) { // if tree is empty
-      node * temp = new node();
-      temp -> value = num;
-      //temp -> right = NULL;
-      //remp -> left = NULL;
-      root = temp;
-      current = temp;
-      }*/
-
-    
-    
   }
   
   return n;
+}
+
+node* find(node * root, int value) {
+  if (root == NULL || root -> value == value) {
+    return root;
+  }
+  if (root -> value > value) {
+    return find(root -> left, value);
+  }
+  return find(root -> right, value);
+}
+
+//used to find the smallest node on the right side of tree
+node* findSR(node * root) {
+  if (root -> left == NULL) {
+    return root;
+  }
+  
+  return findSR(root->left);
+}
+
+//used to find the largest node on the left side of tree
+node* findSL(node * root) {
+  if (root -> right == NULL) {
+    return root;
+  }
+  
+  return findSL(root->right);
 }
