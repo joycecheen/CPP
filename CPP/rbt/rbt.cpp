@@ -23,7 +23,7 @@ int main() {
       int num;
       cout << "single number to insert into the tree: ";
       cin >> num;
-      // add function
+      list -> insert(number, list -> getHead());
     }
     else if (strcmp(userinput, "READ") == 0) {
       char filename[20] = {};
@@ -31,17 +31,26 @@ int main() {
       cin >> filename;
 
       // open file
-      ifstream file (filename);
-      if (file.is_open()) {
-	
-        // add file data to tree
+      ifstream file(filename);
+      int c = 0;
+      while (!file.eof()) {
+	char digit;
+	file >> digit;
 
-	file.close();
+	if (digit == ' ') {
+	  list->insert(current, list->getHead());
+          cout << "tree (sideways)" << endl;
+          list->print(list->getHead(), 0);
+          current = 0;
+        }
+        else {
+	  current *= 10;
+          current += (digit - '0');
+        }	
       }
-      else {
-	cout << "cannot open file" << endl;
-      }
-
+      current /= 10;
+      list->insert(current, list->getHead());
+      list->print(list->getHead(), 0);
     }
     else if (strcmp(userinput, "PRINT") == 0) {
       // print out tree
