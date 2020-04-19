@@ -29,3 +29,34 @@ void node::setRight(node * rightN) {
 void node::setParent(node * parentN) {
   parent = parentN;
 }
+
+int node::getValue() {
+  return value;
+}
+
+int node::getColor() {
+  return color;
+}
+
+node * node::getParent() {
+  return parent;
+}
+
+node * node::getLeft() {
+  return left;
+}
+
+node * node::getRight() {
+  return right;
+}
+
+node * node::getGrandparent() {
+  return parent -> getParent();
+}
+
+node * node::getUncle() {
+  if (parent->getValue() > getGrandparent()->getValue()) {
+    return getGrandparent()->getLeft();
+  }
+  return getGrandparent()->getRight();
+}
