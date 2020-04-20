@@ -40,7 +40,7 @@ int main() {
       cout << "enter file name: "; // get file name
       cin >> filename;
 
-      ifstream file (filename);
+      /*ifstream file (filename);
         if (file.is_open()) {
           while (getline (file, line)) {
             int a = 0;
@@ -57,11 +57,16 @@ int main() {
 
         n = convert(chardata, intdata);
 
-        for (int i = 0; i < n; i++) { // insert
+	/*
+	cout << "N: " << n << endl;
+	for (int i = 0; i < n; i++) {
+	  cout << intdata[i] << " ";
+	  }*/
+	
+      /*  for (int i = 0; i < n; i++) { // insert
           list -> insert(intdata[i], list -> getHead());
-        }
+	}*/
       
-      /*
       // open file
       ifstream file(filename);
       int c = 0;
@@ -69,10 +74,10 @@ int main() {
 	char digit;
 	file >> digit;
 
-	if (digit == ' ') {
-	  list->insert(c, list->getHead());
-          cout << "tree (sideways)" << endl;
-          list->print(list->getHead(), 0);
+	if (digit == ',') {
+	  list -> insert(c, list->getHead());
+	  cout << "tree (sideways)" << endl;
+          list -> print(0, list->getHead());
           c = 0;
         }
         else {
@@ -81,9 +86,11 @@ int main() {
         }	
       }
       c /= 10;
+      cout << "tree (sideways)" << endl;
       list->insert(c, list->getHead());
-      list->print(list->getHead(), 0);
-      */
+      list->print(0, list->getHead());
+      
+      cout << "INSERTED" << endl;
     }
     else if (strcmp(userinput, "PRINT") == 0) {
       list -> print(0, list -> getHead());
