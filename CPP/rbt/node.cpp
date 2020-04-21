@@ -1,8 +1,11 @@
 #include "node.h"
 #include <iostream>
 
-// node constructor
-node::node(int valueN, int colorN, node* parentN, node* leftN, node* rightN) {
+/*
+ * node functions
+ */
+
+node::node(int valueN, int colorN, node* parentN, node* leftN, node* rightN) { // node constructor
   value = valueN;
   color = colorN;
   left = leftN;

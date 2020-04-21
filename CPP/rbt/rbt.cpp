@@ -1,9 +1,13 @@
 #include "node.h"
 #include "tree.h"
-
 #include <iostream>
 #include <cstring>
 #include <fstream>
+
+/* Red Black Tree Part 1 - Insertion: Create a Red-Black Tree
+ * Name: Joyce Chen
+ * Date: 4/20/20
+ */
 
 using namespace std;
 
@@ -24,23 +28,25 @@ int main() {
   cout << "type 'PRINT' to print the tree" << endl;
   cout << "type 'QUIT' to quit" << endl << endl;
 
-  while (run == true) {
+  while (run == true) { // while user has not quit
     cin >> userinput;
     cin.ignore();
 
-    if (strcmp(userinput, "ADD") == 0) {
+    if (strcmp(userinput, "ADD") == 0) { // add a single number to tree
       int num = 0;
       cout << "single number to insert into the tree: ";
       cin >> num;
-      list -> insert(num, list -> getHead());
+      list -> insert(num, list -> getHead()); // insert
+      cout << "ADDED \n\n";
     }
-    else if (strcmp(userinput, "READ") == 0) {
+    else if (strcmp(userinput, "READ") == 0) { // read in file and add to tree sequentially
       char filename[20] = {};
       string line;
       cout << "enter file name: "; // get file name
       cin >> filename;
 
-      ifstream file (filename);
+      // open file and copy file data into char array
+      ifstream file (filename); 
         if (file.is_open()) {
           while (getline (file, line)) {
             int a = 0;
@@ -55,51 +61,22 @@ int main() {
           cout << "cannot open file" << endl;
         }
 
-        n = convert(chardata, intdata);
-
-	cout << "N: " << n << endl;
-	for (int i = 0; i < n; i++) {
-	  cout << intdata[i] << " ";
-	  }
+        n = convert(chardata, intdata); // convert char array into int array
 	
         for (int i = 0; i < n; i++) { // insert
           list -> insert(intdata[i], list -> getHead());
-	  list -> print(list -> getHead(), 0);
-	}
-      
-      /*// open file
-      ifstream fin(filename);
-      int c = 0;
-      while (!fin.eof()) {
-	char digit;
-	fin >> digit;
-	if (digit == ',') {
-	  list -> insert(c, list->getHead());
-	  cout << "tree (sideways)" << endl;
-          list -> print(list->getHead(), 0);
-          c = 0;
-        }
-        else {
-	  c *= 10;
-          c += (digit - '0');
-        }	
-      }
-      c /= 10;
-      cout << "tree (sideways)" << endl;
-      list->insert(c, list->getHead());
-      list->print(list->getHead(), 0);
-      */
-      
-      cout << "INSERTED" << endl;
+	}      
+      cout << "ADDED \n\n";
     }
-    else if (strcmp(userinput, "PRINT") == 0) {
+    else if (strcmp(userinput, "PRINT") == 0) { // print tree
       list -> print(list -> getHead(), 0);
+      cout << "PRINTED \n\n";
     }
-    else if (strcmp(userinput, "QUIT") == 0) {
+    else if (strcmp(userinput, "QUIT") == 0) { // quit
       run = false;
     }
     else {
-      cout << "not a valid command ^^" << endl;
+      cout << "not a valid command ^^ \n\n";
     }
   }
 
@@ -118,7 +95,7 @@ int convert(char * chardata, int * intdata) {
         num = (num * 10) + tempI;
         i++;
       }
-      if ((num < 1000) && (num > 0)) {
+      if ((num < 1000) && (num > 0)) { // 1-999
         intdata[n] = num; // add to int arr
         n++;
       }

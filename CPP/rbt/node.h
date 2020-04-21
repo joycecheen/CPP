@@ -1,6 +1,10 @@
 #ifndef NODE_H
 #define NODE_H
 
+/*
+ * node header file
+ */
+
 class node{
  public:
   node(int valueN, int colorN, node* parentN, node* leftN, node* rightN);

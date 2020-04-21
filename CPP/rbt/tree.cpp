@@ -1,204 +1,199 @@
 #include "tree.h"
 #include <iostream>
 
+/*
+ * tree functions
+ * source : https://www.geeksforgeeks.org/red-black-tree-set-2-insert/
+ */
+
 using namespace std;
 
-tree::tree() {
+tree::tree() { // constructor
   head = new node(0, 0, NULL, NULL, NULL);
 }
 
-node* tree::getHead() {
+node* tree::getHead() { // get head
   return head;
 }
 
 //checks if node is a left child or right child
-bool isLeft(node* root) {
-  
-  if (root->getValue() <= root->getParent()->getValue()) {
+bool isLeft(node* root) {  
+  if (root -> getParent() -> getValue() >= root -> getValue()) {
     return true;
   }
-  return false;
+  else {
+    return false;
+  }
 }
 
-void tree::insert(int value, node * root) {
-  if (root->getValue() == 0) {
-    root->setValue(value);
+void tree::insert(int value, node * root) { // insert node then fix to red black tree
+  if (root -> getValue() == 0) {
+    root -> setValue(value);
   }
-  else if (value <= root->getValue()) {
-    if (root->getLeft() == NULL) {
+  else if (value <= root -> getValue()) {
+    if (root -> getLeft() == NULL) {
       node* temp = new node(value, 1, root, NULL, NULL);
-      root->setLeft(temp);
-      repair(root->getLeft());
+      root -> setLeft(temp);
+      repair(root -> getLeft());
     }
     else {
-      insert(value, root->getLeft());
+      insert(value, root -> getLeft());
     }
   }
   else {
     if (root->getRight() == NULL) {
       node* temp = new node(value, 1, root, NULL, NULL);
-      root->setRight(temp);
-      repair(root->getRight());
+      root -> setRight(temp);
+      repair(root -> getRight());
     }
     else {
-      insert(value, root->getRight());
+      insert(value, root -> getRight());
     }
   }
 }
 
-void tree::print(node *root, int tabs) {
-  if (root != NULL && root->getValue() == 0) {
-    cout << "tree has no nodes" << endl;
-  }
-  if (root == NULL || root->getValue() == 0) {
+void tree::print(node *root, int spaces) { // print out visual representation of tree
+  if (root == NULL || root -> getValue() == 0) {
     return;
   }
-  print(root->getRight(), tabs + 1);
-  for (int a = 0; a < tabs; a++) {
+  print(root -> getRight(), spaces + 1);
+  for (int a = 0; a < spaces; a++) {
     cout << "\t";
   }
-  if (root->getColor() == 0) {
+  if (root -> getColor() == 0) {
     cout << root->getValue() << " B" << endl;
   }
   else {
-    cout << root->getValue() << " R" << endl;
+    cout << root -> getValue() << " R" << endl;
   }
-  print(root->getLeft(), tabs + 1);
+  print(root -> getLeft(), spaces + 1);
 }
 
-void tree::repair(node * root) {
-  //sets head node to be black
-  if (root->getParent() == NULL) {
-    root->setColor(0);
+void tree::repair(node * root) { // update tree so it is a red black tree
+  if (root -> getParent() == NULL) { // root is black
+    root -> setColor(0);
   }
-  //if parent or grandparent is NULL, then no changes are needed, return
-  if (root->getParent() == NULL || root->getGrandparent() == NULL) {
+  if (root -> getParent() == NULL || root -> getGrandparent() == NULL) { 
     return;
   }
-  //if uncle and parent are red, recolor appropriately, and recursively fix the tree with grandparent as current node
-  if (root->getUncle() != NULL && root->getUncle()->getColor() == 1 && root->getParent()->getColor() == 1) {
-    root->getParent()->setColor(0);
-    root->getUncle()->setColor(0);
-    root->getGrandparent()->setColor(1);
-    repair(root->getGrandparent());
+  if (root -> getUncle() != NULL && root -> getUncle() -> getColor() == 1 && root -> getParent() -> getColor() == 1) { // if uncle & parent are red, update
+    root -> getParent() -> setColor(0);
+    root -> getUncle() -> setColor(0);
+    root -> getGrandparent() -> setColor(1);
+    repair(root -> getGrandparent()); // recursively fix tree with grandparent
   }
-  else if (root->getParent()->getColor() == 1) {//if parent is red and uncle is NULL or black
-    node* greatGrandparent = root->getGrandparent()->getParent();
-    node* grandparent = root->getGrandparent();
-    //if current node is a left left node, reorder appropriately
-    if (isLeft(root) && isLeft(root->getParent())) {
-
-      node* temp = new node(grandparent->getValue(), 1, root->getParent(), root->getParent()->getRight(), root->getUncle());
-      if (greatGrandparent == NULL) {
+  else if (root->getParent() -> getColor() == 1) { // if parent is red and uncle is NULL or black
+    node* gG = root -> getGrandparent() -> getParent(); // gG = great-grandparent
+    node* grandparent = root -> getGrandparent();
+    
+    if (isLeft(root) && isLeft(root->getParent())) { // if left left case, update
+      node* temp = new node(grandparent->getValue(), 1, root -> getParent(), root -> getParent() -> getRight(), root -> getUncle());
+      if (gG == NULL) {
 	delete head;
-	head = root->getParent();
-	head->setParent(NULL);
-	head->setRight(temp);
-	head->setColor(0);
+	head = root -> getParent();
+	head -> setParent(NULL);
+	head -> setRight(temp);
+	head -> setColor(0);
       }
       else {
-	root->getParent()->setParent(greatGrandparent);
-	if (isLeft(root->getParent())) {
-	  greatGrandparent->setLeft(root->getParent());
+	root -> getParent() -> setParent(gG);
+	if (isLeft(root -> getParent())) {
+	  gG -> setLeft(root -> getParent());
 	}
 	else {
-	  greatGrandparent->setRight(root->getParent());
+	  gG -> setRight(root -> getParent());
 	}
 	delete grandparent;
-	root->getParent()->setRight(temp);
-	root->getParent()->setColor(0);
+	root -> getParent() -> setRight(temp);
+	root -> getParent() -> setColor(0);
       }
     }
-    //if current node is a left right node, reorder appropriately
-    else if (!isLeft(root) && isLeft(root->getParent())) {
-      node* temp = new node(grandparent->getValue(), 1, root, root->getRight(), root->getUncle());
-      node* left = root->getLeft();
-      root->setLeft(root->getParent());
-      root->getLeft()->setRight(left);
-      root->getLeft()->setParent(root);
-      root->setParent(grandparent);
+    else if (!isLeft(root) && isLeft(root -> getParent())) { // if left right case, update 
+      node* temp = new node(grandparent -> getValue(), 1, root, root -> getRight(), root -> getUncle());
+      node* left = root -> getLeft();
+      root -> setLeft(root -> getParent());
+      root -> getLeft() -> setRight(left);
+      root -> getLeft() -> setParent(root);
+      root -> setParent(grandparent);
       if (left != NULL) {
-	left->setParent(root->getLeft());
+	left -> setParent(root -> getLeft());
       }
-      grandparent->setLeft(root);
+      grandparent -> setLeft(root);
 
-      root = root->getLeft();
-      if (greatGrandparent == NULL) { 
-
+      root = root -> getLeft();
+      if (gG == NULL) { 
 	delete head;
-	head = root->getParent();
-	head->setParent(NULL);
-	head->setRight(temp);
-	head->setColor(0);
+	head = root -> getParent();
+	head -> setParent(NULL);
+	head -> setRight(temp);
+	head -> setColor(0);
       }
       else {
-	root->getParent()->setParent(greatGrandparent);
-	if (isLeft(root->getParent())) {
-	  greatGrandparent->setLeft(root->getParent());
+	root -> getParent() -> setParent(gG);
+	if (isLeft(root -> getParent())) {
+	  gG -> setLeft(root -> getParent());
 	}
 	else {
-	  greatGrandparent->setRight(root->getParent());
+	  gG -> setRight(root -> getParent());
 	}
 	delete grandparent;
-	root->getParent()->setRight(temp);
-	root->getParent()->setColor(0);
+	root->getParent() -> setRight(temp);
+	root->getParent() -> setColor(0);
       }
-    }
-    //if current node is a right right node, reorder appropriately
-    else if (!isLeft(root) && !isLeft(root->getParent())) {
-      node *temp = new node(grandparent->getValue(), 1, root->getParent(), root->getUncle(), root->getParent()->getLeft());
-      if (greatGrandparent == NULL) {
+    } 
+    else if (!isLeft(root) && !isLeft(root -> getParent())) { // if right right case, update
+      node *temp = new node(grandparent -> getValue(), 1, root -> getParent(), root -> getUncle(), root -> getParent() -> getLeft());
+      if (gG == NULL) {
 	delete head;
-	head = root->getParent();
-	head->setParent(NULL);
-	head->setLeft(temp);
-	head->setColor(0);
+	head = root -> getParent();
+	head -> setParent(NULL);
+	head -> setLeft(temp);
+	head -> setColor(0);
       }
       else {
-	root->getParent()->setParent(greatGrandparent);
-	if (isLeft(root->getParent())) {
-	  greatGrandparent->setLeft(root->getParent());
+	root -> getParent() -> setParent(gG);
+	if (isLeft(root -> getParent())) {
+	  gG -> setLeft(root -> getParent());
 	}
 	else {
-	  greatGrandparent->setRight(root->getParent());
+	  gG -> setRight(root -> getParent());
 	}
 	delete grandparent;
-	root->getParent()->setLeft(temp);
-	root->getParent()->setColor(0);
+	root -> getParent() -> setLeft(temp);
+	root -> getParent() -> setColor(0);
       }
     }
-    //if current node is a right left node, reorder appropriately
-    else if (isLeft(root) && !isLeft(root->getParent())) {
-      node* temp = new node(grandparent->getValue(), 1, root, root->getUncle(), root->getLeft());
-      node* right = root->getRight();
-      root->setRight(root->getParent());
-      root->getRight()->setLeft(right);
+    else if (isLeft(root) && !isLeft(root -> getParent())) { // if right left case, update
+      node* temp = new node(grandparent -> getValue(), 1, root, root -> getUncle(), root -> getLeft());
+      node* right = root -> getRight();
+      root -> setRight(root -> getParent());
+      root -> getRight() -> setLeft(right);
       if (right != NULL) {
-	right->setParent(root->getRight());
+	right -> setParent(root -> getRight());
       }
-      root->getRight()->setParent(root);
-      root->setParent(grandparent);
-      grandparent->setRight(root);
+      root -> getRight() -> setParent(root);
+      root -> setParent(grandparent);
+      grandparent -> setRight(root);
 
-      root = root->getRight();
-      if (greatGrandparent == NULL) {
+      root = root -> getRight();
+      if (gG == NULL) {
 	delete head;
-	head = root->getParent();
-	head->setParent(NULL);
-	head->setLeft(temp);
-	head->setColor(0);
+	head = root -> getParent();
+	head -> setParent(NULL);
+	head -> setLeft(temp);
+	head -> setColor(0);
       }
       else {
-	root->getParent()->setParent(greatGrandparent);
-	if (isLeft(root->getParent())) {
-	  greatGrandparent->setLeft(root->getParent());
+	root -> getParent() -> setParent(gG);
+	if (isLeft(root -> getParent())) {
+	  gG -> setLeft(root -> getParent());
 	}
 	else {
-	  greatGrandparent->setRight(root->getParent());
+	  gG -> setRight(root -> getParent());
 	}
 	delete grandparent;
-	root->getParent()->setLeft(temp);
-	root->getParent()->setColor(0);
+	root -> getParent() -> setLeft(temp);
+	root -> getParent() -> setColor(0);
       }
     }
   }
