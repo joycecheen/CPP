@@ -3,7 +3,7 @@
 
 class node{
  public:
-  node(int valueN, int colorN, node* leftN, node* rightN, node* parentN);
+  node(int valueN, int colorN, node* parentN, node* leftN, node* rightN);
 
   void setValue(int valueN);
   int getValue();

@@ -61,6 +61,7 @@ int main() {
 	for (int i = 0; i < n; i++) {
 	  cout << intdata[i] << " ";
 	  }
+	cout << endl;
 	
         for (int i = 0; i < n; i++) { // insert
           list -> insert(intdata[i], list -> getHead());

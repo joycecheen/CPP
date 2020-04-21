@@ -46,15 +46,15 @@ void tree::insert(int value, node * root) {
   }
 }
 
-void tree::print(node * root, int spaces) {
+void tree::print(node *root, int tabs) {
   if (root != NULL && root->getValue() == 0) {
     cout << "tree has no nodes" << endl;
   }
   if (root == NULL || root->getValue() == 0) {
     return;
   }
-  print(root->getRight(), spaces + 1);
-  for (int a = 0; a < spaces; a++) {
+  print(root->getRight(), tabs + 1);
+  for (int a = 0; a < tabs; a++) {
     cout << "\t";
   }
   if (root->getColor() == 0) {
@@ -63,7 +63,7 @@ void tree::print(node * root, int spaces) {
   else {
     cout << root->getValue() << " R" << endl;
   }
-  print(root->getLeft(), spaces + 1);
+  print(root->getLeft(), tabs + 1);
 }
 
 void tree::repair(node * root) {

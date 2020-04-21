@@ -2,7 +2,7 @@
 #include <iostream>
 
 // node constructor
-node::node(int valueN, int colorN, node* leftN, node* rightN, node* parentN) {
+node::node(int valueN, int colorN, node* parentN, node* leftN, node* rightN) {
   value = valueN;
   color = colorN;
   left = leftN;
