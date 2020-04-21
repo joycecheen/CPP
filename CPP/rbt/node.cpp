@@ -18,15 +18,15 @@ void node::setColor(int colorN) {
   color = colorN;
 }
 
-void node::setLeft(node * leftN) {
+void node::setLeft(node* leftN) {
   left = leftN;
 }
 
-void node::setRight(node * rightN) {
+void node::setRight(node* rightN) {
   right = rightN;
 }
 
-void node::setParent(node * parentN) {
+void node::setParent(node* parentN) {
   parent = parentN;
 }
 
@@ -38,23 +38,23 @@ int node::getColor() {
   return color;
 }
 
-node * node::getParent() {
+node* node::getParent() {
   return parent;
 }
 
-node * node::getLeft() {
+node* node::getLeft() {
   return left;
 }
 
-node * node::getRight() {
+node* node::getRight() {
   return right;
 }
 
-node * node::getGrandparent() {
+node* node::getGrandparent() {
   return parent -> getParent();
 }
 
-node * node::getUncle() {
+node* node::getUncle() {
   if (parent->getValue() > getGrandparent()->getValue()) {
     return getGrandparent()->getLeft();
   }

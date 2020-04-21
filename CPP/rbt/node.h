@@ -10,21 +10,21 @@ class node{
   void setColor(int colorN);
   int getColor();
 
-  void setLeft(node * leftN);
-  node * getLeft();
-  void setRight(node * rightN);
-  node * getRight();
-  void setParent(node * parentN);
-  node * getParent();
-  node * getGrandparent();
-  node * getUncle();
+  void setLeft(node* left);
+  node* getLeft();
+  void setRight(node* right);
+  node* getRight();
+  void setParent(node* parent);
+  node* getParent();
+  node* getGrandparent();
+  node* getUncle();
   
  private:
   int color;
   int value;
-  node * left;
-  node * right;
-  node * parent;
+  node* left;
+  node* right;
+  node* parent;
 
 };
 

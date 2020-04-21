@@ -36,7 +36,7 @@ int main() {
     }
     else if (strcmp(userinput, "READ") == 0) {
       char filename[20] = {};
-      string line;
+      //string line;
       cout << "enter file name: "; // get file name
       cin >> filename;
 
@@ -68,16 +68,15 @@ int main() {
 	}*/
       
       // open file
-      ifstream file(filename);
+      ifstream fin(filename);
       int c = 0;
-      while (!file.eof()) {
+      while (!fin.eof()) {
 	char digit;
-	file >> digit;
-
+	fin >> digit;
 	if (digit == ',') {
 	  list -> insert(c, list->getHead());
 	  cout << "tree (sideways)" << endl;
-          list -> print(0, list->getHead());
+          list -> print(list->getHead(), 0);
           c = 0;
         }
         else {
@@ -88,12 +87,12 @@ int main() {
       c /= 10;
       cout << "tree (sideways)" << endl;
       list->insert(c, list->getHead());
-      list->print(0, list->getHead());
+      list->print(list->getHead(), 0);
       
       cout << "INSERTED" << endl;
     }
     else if (strcmp(userinput, "PRINT") == 0) {
-      list -> print(0, list -> getHead());
+      list -> print(list -> getHead(), 0);
     }
     else if (strcmp(userinput, "QUIT") == 0) {
       run = false;
@@ -104,27 +103,4 @@ int main() {
   }
 
   return 0;
-}
-
-// turn read in char arr into int arr, also return number of values
-int convert(char * chardata, int * intdata) {
-  int n = 0;
-  for (int i = 0; i < strlen(chardata); i++) {
-    if (chardata[i] >= 48 && chardata[i] <= 57) { // add to int array if char is a num
-      int num = chardata[i] - '0';
-
-      while(chardata[i+1] >= 48 && chardata[i+1] <= 57) { // multi digit num
-        int tempI = chardata[i+1] - '0';
-        num = (num * 10) + tempI;
-        i++;
-      }
-      if ((num < 1000) && (num > 0)) {
-        intdata[n] = num; // add to int arr
-        n++;
-      }
-    }
-
-  }
-
-  return n;
 }
