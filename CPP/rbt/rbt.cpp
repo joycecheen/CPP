@@ -26,6 +26,8 @@ int main() {
   cout << "type 'ADD' to enter a single number" << endl;
   cout << "type 'READ' to read in a file" << endl;
   cout << "type 'PRINT' to print the tree" << endl;
+  cout << "type 'SEARCH' to check for a number in the tree" << endl;
+  cout << "type 'REMOVE' to remove a particular number" << endl;
   cout << "type 'QUIT' to quit" << endl << endl;
 
   while (run == true) { // while user has not quit
@@ -71,6 +73,22 @@ int main() {
     else if (strcmp(userinput, "PRINT") == 0) { // print tree
       list -> print(list -> getHead(), 0);
       cout << "PRINTED \n\n";
+    }
+    else if (strcmp(userinput, "SEARCH") == 0) {
+      int value = 0;
+      cout << "please input value to search: ";
+      cin >> value;
+
+      // search function
+    }
+    else if (strcmp(userinput, "REMOVE") == 0) {
+      int value = 0;
+      cout << "please input value to delete: ";
+      cin >> value;
+      
+      // remove function
+
+      cout << "REMOVED \n\n";
     }
     else if (strcmp(userinput, "QUIT") == 0) { // quit
       run = false;
