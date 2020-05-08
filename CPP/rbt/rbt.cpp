@@ -79,13 +79,19 @@ int main() {
       cout << "please input value to search: ";
       cin >> value;
 
-      // search function
+      if (list -> search(value, list -> getHead()) != NULL) {
+        cout << value << "is in tree" << endl;
+      }
+      else {
+	cout << value << "is not in tree" << endl;
+      }
+      
     }
     else if (strcmp(userinput, "REMOVE") == 0) {
       int value = 0;
       cout << "please input value to delete: ";
       cin >> value;
-      
+
       // remove function
 
       cout << "REMOVED \n\n";

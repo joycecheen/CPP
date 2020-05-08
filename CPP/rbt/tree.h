@@ -12,6 +12,8 @@ class tree {
   void print(node* root, int spaces);
   void repair(node* root);
   node* getHead();
+  void remove(node* root);
+  node search(int value, node* root);
  private:
   node* head;
 };

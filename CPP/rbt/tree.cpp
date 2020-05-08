@@ -198,3 +198,20 @@ void tree::repair(node * root) { // update tree so it is a red black tree
     }
   }
 }
+
+void tree::remove(node* root) {
+
+}
+
+node* tree::search(int value, node* root) {
+  if (root == NULL) {
+    return NULL;
+  }
+  if (root -> getValue() == value) {
+    return root;
+  }
+  if (value <= root->getValue()) {
+    return search(value, root->getLeft());
+  }
+  return search(value, root->getRight());
+}
