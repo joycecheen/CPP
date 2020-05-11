@@ -63,3 +63,30 @@ node* node::getUncle() {
   }
   return getGrandparent()->getRight();
 }
+
+node* node::getSibling() {
+  if (value <= parent->getValue()) {
+    return parent->getRight();
+  }
+  return parent->getLeft();
+}
+node* node::getRSon() {
+  if (value <= parent->getValue()) {
+    if (left != NULL && left->getColor() == 1) {
+      return left;
+    }
+    if (right != NULL && right->getColor() == 1) {
+      return right;
+    }
+    return NULL;
+  }
+  else {
+    if (right != NULL && right->getColor() == 1) {
+      return right;
+    }
+    if (left != NULL && left->getColor() == 1) {
+      return left;
+    }
+    return NULL;
+  }
+}

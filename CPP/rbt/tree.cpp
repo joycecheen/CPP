@@ -199,6 +199,13 @@ void tree::repair(node * root) { // update tree so it is a red black tree
   }
 }
 
+node* findSuccessor(node* root) {
+  if (root->getRight() == NULL) {
+    return root;
+  }
+  return findSuccessor(root->getRight());
+}
+
 void tree::remove(node* root) {
   //if node is a double black
   if (root->getColor() >= 2) {
@@ -220,9 +227,9 @@ void tree::remove(node* root) {
       }
     }
     //if sibling is black and has a red child
-    else if (root->getSibling() != NULL && root->getSibling()->getColor() == 0 && root->getSibling()->getRedSon() != NULL){
+    else if (root->getSibling() != NULL && root->getSibling()->getColor() == 0 && root->getSibling()->getRSon() != NULL){
       //when sibling and sibling's child is left left
-      if (isLeft(root->getSibling()) && isLeft(root->getSibling()->getRedSon())) {
+      if (isLeft(root->getSibling()) && isLeft(root->getSibling()->getRSon())) {
 	//when root's parent is the top node
 	if (root->getGrandparent() == NULL) {
 	  root->getSibling()->setColor(head->getColor());
@@ -275,12 +282,12 @@ void tree::remove(node* root) {
 	}
       }
       //when sibling and sibling's child is left right
-      else if (isLeft(root->getSibling()) && !isLeft(root->getSibling()->getRedSon())) {
+      else if (isLeft(root->getSibling()) && !isLeft(root->getSibling()->getRSon())) {
 	//reorder the sibling and it's child, then recall the remove function
 	node* sibling = root->getSibling();
-	root->getParent()->setLeft(sibling->getRedSon());
-	sibling->getRedSon()->setLeft(sibling);
-	sibling->setParent(sibling->getRedSon());
+	root->getParent()->setLeft(sibling->getRSon());
+	sibling->getRSon()->setLeft(sibling);
+	sibling->setParent(sibling->getRSon());
 	sibling->getParent()->setParent(root->getParent());
 	sibling->setLeft(NULL);
 	sibling->setRight(NULL);
@@ -290,7 +297,7 @@ void tree::remove(node* root) {
 	remove(root);
       }
       //when sibling and sibling's child is right right
-      else if (!isLeft(root->getSibling()) && !isLeft(root->getSibling()->getRedSon())) {
+      else if (!isLeft(root->getSibling()) && !isLeft(root->getSibling()->getRSon())) {
 	//when root's parent is the head node
 	if (root->getGrandparent() == NULL) {
 	  root->getSibling()->setColor(head->getColor());
@@ -343,12 +350,12 @@ void tree::remove(node* root) {
 	}
       }
       //when sibling and sibling's child is right left
-      else if (!isLeft(root->getSibling()) && isLeft(root->getSibling()->getRedSon())) {
+      else if (!isLeft(root->getSibling()) && isLeft(root->getSibling()->getRSon())) {
 	//reorder sibling and it's child, then recall remove
 	node* sibling = root->getSibling();
-	root->getParent()->setRight(sibling->getRedSon());
-	sibling->getRedSon()->setRight(sibling);
-	sibling->setParent(sibling->getRedSon());
+	root->getParent()->setRight(sibling->getRSon());
+	sibling->getRSon()->setRight(sibling);
+	sibling->setParent(sibling->getRSon());
 	sibling->getParent()->setParent(root->getParent());
 	sibling->setRight(NULL);
 	sibling->setLeft(NULL);
@@ -451,7 +458,7 @@ void tree::remove(node* root) {
 	  }
 	  else {
 	    root->getGrandparent()->setRight(sibling);
-	    OB	  }
+     	  }
 	  root->getParent()->setParent(sibling);
 	  sibling->setColor(0);
 	  node* right = sibling->getLeft();

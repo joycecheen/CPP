@@ -22,6 +22,8 @@ class node{
   node* getParent();
   node* getGrandparent();
   node* getUncle();
+  node* getSibling();
+  node* getRSon();
   
  private:
   int color;
