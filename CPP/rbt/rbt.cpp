@@ -80,19 +80,24 @@ int main() {
       cin >> value;
 
       if (list -> search(value, list -> getHead()) != NULL) {
-        cout << value << "is in tree" << endl;
+        cout << value << " is in tree" << endl;
       }
       else {
-	cout << value << "is not in tree" << endl;
+	cout << value << " is not in tree" << endl;
       }
-      
+      cout << "\n\n";
     }
     else if (strcmp(userinput, "REMOVE") == 0) {
       int value = 0;
       cout << "please input value to delete: ";
       cin >> value;
 
-      // remove function
+      if (list->search(value, list->getHead()) != NULL) {
+	list->remove(list->search(value, list->getHead()));
+      }
+      else {
+	cout << value << " not in tree" << endl;
+      }
 
       cout << "REMOVED \n\n";
     }
