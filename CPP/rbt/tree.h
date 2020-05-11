@@ -13,7 +13,7 @@ class tree {
   void repair(node* root);
   node* getHead();
   void remove(node* root);
-  node search(int value, node* root);
+  node* search(int value, node* root);
  private:
   node* head;
 };
