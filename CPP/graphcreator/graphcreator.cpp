@@ -4,13 +4,30 @@
 
 using namespace std;
 
-struct edge {
+/* Name: Joyce Chen
+ * Graph Creator: A program which can create graphs and search shortest path
+ */
+
+struct vertex {
   char * name;
-  vector<edge*> c;
+  vector<vertex*> c;
   vector<int> weights; 
 };
 
+struct p {
+  int length;
+  vertex* nextV;
+  vector<vertex*> beenTo;
+};
+
+vertex* getVertex(char* label, vector<vertex*> allV);
+int contain(vertex* from, vertex* find);
+void print(vector<vertex*> allV);
+int djikstra(vector<p*> next, vertex* destination);
+
 int main() {
+  vector<vertex*> allV;
+  
   while (true) {
     char * input = new char(10);
 
@@ -24,7 +41,12 @@ int main() {
     cin.getline(input, 10);
 
     if (strcmp(input, "AV") == 0) {
-
+      cout << "input vertex label: ";
+      vertex * temp = new vertex();
+      temp -> name = new char(20);
+      cin.getline(temp -> name, 20);
+      allV.push_back(temp);
+      print(allV);
     }
     else if (strcmp(input, "AE") == 0) {
 
@@ -46,4 +68,34 @@ int main() {
     }
   }
   return 0;
+}
+
+int contain(vertex* from, vertex* find){
+  for (int a = 0; a < from -> c.size(); a++) {
+    if (from -> c[a] == find) {
+      return a;
+    }
+  }
+  return -1;
+}
+
+void print(vector<vertex*> allV) {
+  cout << "adjacency matrix\t" << endl;
+  for (int a = 0; a < allV.size(); a++) {
+    cout << allV[a] -> name << "\t";
+  }
+  cout << endl;
+  for (int a = 0; a < allV.size(); a++) {
+    cout << allV[a] -> name << "\t";
+    for (int b = 0; b < allV.size(); b++) {
+
+      if (contain(allV[a], allV[b]) != -1) {
+	cout << allV[a] -> weights[contain(allV[a], allV[b])] << "\t";
+      }
+      else {
+	cout << "_" << "\t";
+      }
+    }
+    cout << endl;
+  }
 }
