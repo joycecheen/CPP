@@ -41,41 +41,87 @@ int main() {
     cin.getline(input, 10);
 
     if (strcmp(input, "AV") == 0) {
-      cout << "input vertex label: ";
       vertex * temp = new vertex();
+      
+      cout << "input vertex label: ";
       temp -> name = new char(20);
       cin.getline(temp -> name, 20);
       allV.push_back(temp);
       print(allV);
     }
     else if (strcmp(input, "AE") == 0) {
-      cout << "input first vertex label: ";
       char* first = new char(20);
+      char* second = new char(20);
+      int weight = 0;
+      
+      cout << "input first vertex label: ";
       cin.getline(first, 20);
       cout << "input second vertex label: ";
-      char* second = new char(20);
       cin.getline(second, 20);
 
       vertex* firstV = getVertex(first, allV);
       vertex* secondV = getVertex(second, allV);
       if (firstV == NULL || secondV == NULL) {
-	cout << "error: node(s) not found" << endl;
+	cout << "node(s) not found" << endl;
 	continue;
       }
       cout << "input edge weight: ";
-      int weight = 0;
       cin >> weight;
 
       firstV -> c.push_back(secondV);
       firstV -> weights.push_back(weight);
       print(allV);
-      
     }
     else if (strcmp(input, "RV") == 0) {
+      char* label = new char(20);
+      cout << "input label of the node you want to remove: ";
+      cin.getline(label, 20);
       
+      vertex* deleteV = getVertex(label, allV);
+      if (deleteV == NULL) {
+	cout << "node not found" << endl;
+	continue;
+      }
+      for (int a = 0; a < allV.size(); a++) {
+	int index = contain(allV[a], deleteV);
+	if (index != -1) {
+	  allV[a] -> c.erase(allV[a] -> c.begin() + index);
+	  allV[a] -> weights.erase(allV[a] -> weights.begin() + index);
+	}
+      }
+      for (int a = 0; a < allV.size(); a++) {
+	if (allV[a] == deleteV) {
+	  allV.erase(allV.begin() + a);
+	  delete deleteV;
+	}
+      }
+      print(allV);
     }
     else if (strcmp(input, "RE") == 0) {
+      char* first = new char(20);
+      char* second = new char(20);
+      
+      cout << "input first node label: ";
+      cin.getline(first, 20);
+      cout << "input second node's label: ";
+      cin.getline(second, 20);
 
+      vertex* firstV = getVertex(first, allV);
+      vertex* secondV = getVertex(second, allV);
+      if (firstV == NULL || secondV == NULL) {
+	cout << "node(s) not found" << endl;
+	continue;
+      }
+
+      int index = contain(firstV, secondV);
+      if (index == -1) {
+	cout << "nodes are not connected" << endl;
+	continue;
+      }
+
+      firstV -> c.erase(firstV -> c.begin() + index);
+      firstV -> weights.erase(firstV -> weights.begin() + index);
+      print(allV);
     }
     else if (strcmp(input, "FSP") == 0) {
 
