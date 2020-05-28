@@ -49,10 +49,30 @@ int main() {
       print(allV);
     }
     else if (strcmp(input, "AE") == 0) {
+      cout << "input first vertex label: ";
+      char* first = new char(20);
+      cin.getline(first, 20);
+      cout << "input second vertex label: ";
+      char* second = new char(20);
+      cin.getline(second, 20);
 
+      vertex* firstV = getVertex(first, allV);
+      vertex* secondV = getVertex(second, allV);
+      if (firstV == NULL || secondV == NULL) {
+	cout << "error: node(s) not found" << endl;
+	continue;
+      }
+      cout << "input edge weight: ";
+      int weight = 0;
+      cin >> weight;
+
+      firstV -> c.push_back(secondV);
+      firstV -> weights.push_back(weight);
+      print(allV);
+      
     }
     else if (strcmp(input, "RV") == 0) {
-
+      
     }
     else if (strcmp(input, "RE") == 0) {
 
@@ -70,6 +90,15 @@ int main() {
   return 0;
 }
 
+vertex* getVertex(char* label, vector<vertex*> allV) {
+  for (int a = 0; a < allV.size(); a++) {
+    if (strcmp(allV[a]->name, label) == 0) {
+      return allV[a];
+    }
+  }
+  return NULL;
+}
+
 int contain(vertex* from, vertex* find){
   for (int a = 0; a < from -> c.size(); a++) {
     if (from -> c[a] == find) {
@@ -80,7 +109,8 @@ int contain(vertex* from, vertex* find){
 }
 
 void print(vector<vertex*> allV) {
-  cout << "adjacency matrix\t" << endl;
+  cout << "adjacency matrix" << endl;
+  cout << "\t";
   for (int a = 0; a < allV.size(); a++) {
     cout << allV[a] -> name << "\t";
   }
