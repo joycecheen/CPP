@@ -8,25 +8,26 @@ using namespace std;
  * Graph Creator: A program which can create graphs and search shortest path
  */
 
-struct vertex {
+struct vertex { // struct for vertex
   char * name;
-  vector<vertex*> c;
+  vector<vertex*> c; // connect to
   vector<int> weights; 
 };
 
-struct p {
+struct p { // struct for next node used in djikstras algorithm
   int length;
-  vertex* nextV;
+  vertex* nextV; 
   vector<vertex*> beenTo;
 };
 
+// function prototypes
 vertex* getVertex(char* label, vector<vertex*> allV);
 int contain(vertex* from, vertex* find);
 void print(vector<vertex*> allV);
 int djikstra(vector<p*> next, vertex* destination);
 
 int main() {
-  vector<vertex*> allV;
+  vector<vertex*> allV; // vertex of all verticies
   
   while (true) {
     char * input = new char(10);
@@ -40,7 +41,7 @@ int main() {
 
     cin.getline(input, 10);
 
-    if (strcmp(input, "AV") == 0) {
+    if (strcmp(input, "AV") == 0) { // add vertex
       vertex * temp = new vertex();
       
       cout << "input vertex label: ";
@@ -49,7 +50,7 @@ int main() {
       allV.push_back(temp);
       print(allV);
     }
-    else if (strcmp(input, "AE") == 0) {
+    else if (strcmp(input, "AE") == 0) { // add edge
       char* first = new char(20);
       char* second = new char(20);
       int weight = 0;
@@ -73,7 +74,7 @@ int main() {
       firstV -> weights.push_back(weight);
       print(allV);
     }
-    else if (strcmp(input, "RV") == 0) {
+    else if (strcmp(input, "RV") == 0) { // remove vertex
       char* label = new char(20);
       cout << "input label of vertex you want to remove: ";
       cin.getline(label, 20);
@@ -98,7 +99,7 @@ int main() {
       }
       print(allV);
     }
-    else if (strcmp(input, "RE") == 0) {
+    else if (strcmp(input, "RE") == 0) { // remove edge
       char* first = new char(20);
       char* second = new char(20);
       
@@ -124,7 +125,7 @@ int main() {
       firstV -> weights.erase(firstV -> weights.begin() + index);
       print(allV);
     }
-    else if (strcmp(input, "FSP") == 0) {
+    else if (strcmp(input, "FSP") == 0) { // find shortest path
       char* first = new char(20);
       char* second = new char(20);
       
@@ -155,7 +156,7 @@ int main() {
 	cout << "shortest path length: " << pathLength << endl;
       }
     }
-    else if (strcmp(input, "Q") == 0) {
+    else if (strcmp(input, "Q") == 0) { // quit
       return 0;
     }
     else {
@@ -166,6 +167,7 @@ int main() {
   return 0;
 }
 
+// returns vertex given label
 vertex* getVertex(char* label, vector<vertex*> allV) {
   for (int a = 0; a < allV.size(); a++) {
     if (strcmp(allV[a]->name, label) == 0) {
@@ -175,6 +177,7 @@ vertex* getVertex(char* label, vector<vertex*> allV) {
   return NULL;
 }
 
+// return index of vertex find if from vertex connects to find
 int contain(vertex* from, vertex* find){
   for (int a = 0; a < from -> c.size(); a++) {
     if (from -> c[a] == find) {
@@ -184,6 +187,7 @@ int contain(vertex* from, vertex* find){
   return -1;
 }
 
+// print out adjacency table
 void print(vector<vertex*> allV) {
   cout << "adjacency matrix" << endl;
   cout << "\t";
@@ -206,27 +210,26 @@ void print(vector<vertex*> allV) {
   }
 }
 
+// source: https://mycodecamp.blogspot.com/2019/04/program-to-implement-dijkstras.html
+// dijkstra's algorithm to find shortest path
 int djikstra(vector<p*> next, vertex* destination) {
-  if (next.size() == 0) {
+  if (next.size() == 0) { // no path if nothing in next vertex
     return -1;
   }
-  // find smallest path length
   p* smallest = next[0];
-  for (int a = 0; a < next.size(); a++) {
+  for (int a = 0; a < next.size(); a++) { // find smallest path length
     if (next[a] -> length < smallest -> length) {
       smallest = next[a];
     }
   }
-  //removes priorty smallest from vertex
-  for (int a = 0; a < next.size(); a++) {
+  for (int a = 0; a < next.size(); a++) { // remove priority smallest from vertex
     if (next[a] == smallest) {
       next.erase(next.begin() + a);
       break;
     }
   }
 
-  //if you reached the destination, return path length
-  if (smallest -> nextV == destination) {
+  if (smallest -> nextV == destination) { // return path and length once destination is reached
     cout << "path: ";
     for (int a = 0; a < smallest -> beenTo.size(); a++) {
       cout << smallest -> beenTo[a] -> name << " ";
@@ -235,9 +238,10 @@ int djikstra(vector<p*> next, vertex* destination) {
     return smallest -> length;
   }
 
-  //using current node, add priorities to next vertex
-  for (int a = 0; a < smallest -> nextV -> c.size(); a++) {
+  for (int a = 0; a < smallest -> nextV -> c.size(); a++) { // add priorities to next v with current
     bool hasBeenTo = false;
+    p * temp = new p();
+    
     for (int b = 0; b < smallest -> beenTo.size(); b++) {
       if (smallest -> beenTo[b] == smallest -> nextV -> c[a]) {
 	hasBeenTo = true;
@@ -247,8 +251,7 @@ int djikstra(vector<p*> next, vertex* destination) {
     if (hasBeenTo) {
       continue;
     }
-    p * temp = new p();
-    temp-> nextV = smallest -> nextV -> c[a];
+    temp -> nextV = smallest -> nextV -> c[a];
     temp -> length = smallest -> length + smallest -> nextV -> weights[a];
     for (int b = 0; b < smallest -> beenTo.size(); b++) {
       temp -> beenTo.push_back(smallest->beenTo[b]);
