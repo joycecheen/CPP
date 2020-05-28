@@ -36,7 +36,7 @@ int main() {
     cout << "type 'RV' to remove vertex" << endl;
     cout << "type 'RE' to remove edge" << endl;
     cout << "type 'FSP' to find shortest path" << endl;
-    cout << "type 'Q' to quit" << endl << endl;
+    cout << "type 'Q' to quit" << endl;
 
     cin.getline(input, 10);
 
@@ -67,6 +67,7 @@ int main() {
       }
       cout << "input edge weight: ";
       cin >> weight;
+      cin.ignore();
 
       firstV -> c.push_back(secondV);
       firstV -> weights.push_back(weight);
@@ -74,12 +75,12 @@ int main() {
     }
     else if (strcmp(input, "RV") == 0) {
       char* label = new char(20);
-      cout << "input label of the node you want to remove: ";
+      cout << "input label of vertex you want to remove: ";
       cin.getline(label, 20);
       
       vertex* deleteV = getVertex(label, allV);
       if (deleteV == NULL) {
-	cout << "node not found" << endl;
+	cout << "vertex not found" << endl;
 	continue;
       }
       for (int a = 0; a < allV.size(); a++) {
@@ -101,21 +102,21 @@ int main() {
       char* first = new char(20);
       char* second = new char(20);
       
-      cout << "input first node label: ";
+      cout << "input first vertex label: ";
       cin.getline(first, 20);
-      cout << "input second node's label: ";
+      cout << "input second vertex label: ";
       cin.getline(second, 20);
 
       vertex* firstV = getVertex(first, allV);
       vertex* secondV = getVertex(second, allV);
       if (firstV == NULL || secondV == NULL) {
-	cout << "node(s) not found" << endl;
+	cout << "vertex(es) not found" << endl;
 	continue;
       }
 
       int index = contain(firstV, secondV);
       if (index == -1) {
-	cout << "nodes are not connected" << endl;
+	cout << "vertices are not connected" << endl;
 	continue;
       }
 
@@ -124,7 +125,35 @@ int main() {
       print(allV);
     }
     else if (strcmp(input, "FSP") == 0) {
+      char* first = new char(20);
+      char* second = new char(20);
+      
+      cout << "input first vertex label: ";
+      cin.getline(first, 20);
+      cout << "input second vertex label: ";
+      cin.getline(second, 20);
 
+      vertex* firstV = getVertex(first, allV);
+      vertex* secondV = getVertex(second, allV);
+      if (firstV == NULL || secondV == NULL) {
+	cout << "error: vertex(es) not found" << endl;
+      }
+
+      vector<p*> next;
+      for (int a = 0; a < firstV -> c.size(); a++) {
+	p* temp = new p();
+	temp -> length = firstV -> weights[a];
+	temp -> nextV = firstV -> c[a];
+	temp -> beenTo.push_back(firstV);
+	next.push_back(temp);
+      }
+      int pathLength = djikstra(next, secondV);
+      if (pathLength == -1) {
+	cout << "no path exists" << endl;
+      }
+      else {
+	cout << "shortest path length: " << pathLength << endl;
+      }
     }
     else if (strcmp(input, "Q") == 0) {
       return 0;
@@ -132,6 +161,7 @@ int main() {
     else {
       cout << "please input a valid command ^^" << endl;
     }
+    cout << endl;
   }
   return 0;
 }
@@ -174,4 +204,57 @@ void print(vector<vertex*> allV) {
     }
     cout << endl;
   }
+}
+
+int djikstra(vector<p*> next, vertex* destination) {
+  if (next.size() == 0) {
+    return -1;
+  }
+  // find smallest path length
+  p* smallest = next[0];
+  for (int a = 0; a < next.size(); a++) {
+    if (next[a] -> length < smallest -> length) {
+      smallest = next[a];
+    }
+  }
+  //removes priorty smallest from vertex
+  for (int a = 0; a < next.size(); a++) {
+    if (next[a] == smallest) {
+      next.erase(next.begin() + a);
+      break;
+    }
+  }
+
+  //if you reached the destination, return path length
+  if (smallest -> nextV == destination) {
+    cout << "path: ";
+    for (int a = 0; a < smallest -> beenTo.size(); a++) {
+      cout << smallest -> beenTo[a] -> name << " ";
+    }
+    cout << destination -> name << endl;
+    return smallest -> length;
+  }
+
+  //using current node, add priorities to next vertex
+  for (int a = 0; a < smallest -> nextV -> c.size(); a++) {
+    bool hasBeenTo = false;
+    for (int b = 0; b < smallest -> beenTo.size(); b++) {
+      if (smallest -> beenTo[b] == smallest -> nextV -> c[a]) {
+	hasBeenTo = true;
+	break;
+      }
+    }
+    if (hasBeenTo) {
+      continue;
+    }
+    p * temp = new p();
+    temp-> nextV = smallest -> nextV -> c[a];
+    temp -> length = smallest -> length + smallest -> nextV -> weights[a];
+    for (int b = 0; b < smallest -> beenTo.size(); b++) {
+      temp -> beenTo.push_back(smallest->beenTo[b]);
+    }
+    temp -> beenTo.push_back(smallest -> nextV);
+    next.push_back(temp);
+  }
+  return djikstra(next, destination);
 }
