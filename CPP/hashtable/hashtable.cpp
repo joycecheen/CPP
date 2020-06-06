@@ -7,7 +7,7 @@
 
 /* Hash Table: Create a hash table and a random student generator.
  * Author: Joyce Chen
- * Date: 6/4/20
+ * Date: 6/5/20
  */
 
 using namespace std;
@@ -27,6 +27,7 @@ struct node { // nodes for linked list struct
 // declare methods
 int getHash(int number, int size);
 int getSize(node* start);
+void add(node** list, int size, student* t);
 
 int main() {
   srand(time(NULL));
@@ -45,15 +46,16 @@ int main() {
   char* fnamefile = new char(20);
   char* lnamefile = new char(20);
 
-  node** list = new node*[size];
+  node** list = new node*[size]; // list containing all students
 
-  for (int i = 0; i < size; i++) {
+  for (int i = 0; i < size; i++) { // set and clear student list
     list[i] = new node();
     list[i] -> student = NULL;
     list[i] -> next = NULL;
   }
 
-  cout << "Input list of first name file: ";
+  // get list of first names for rsg
+  cout << "Input list of first name file: "; 
   cin.getline(fnamefile, 20);
   ifstream ffile(fnamefile);
   if (ffile.is_open()) {
@@ -61,6 +63,13 @@ int main() {
     cout << "Cannot open file" << endl;
     return 0;
   }
+  while (!ffile.eof()) {
+    char* tempname = new char(30);
+    ffile >> tempname;
+    fnames.push_back(tempname);
+  }
+
+  // get list of last names for rsg
   cout << "Input list of last name file: ";
   cin.getline(lnamefile, 20);
   ifstream lfile(lnamefile);
@@ -69,19 +78,11 @@ int main() {
     cout << "Cannot open file" << endl;
     return 0;
   }
-  
-  // gets all the first names from first name file
-  while (!ffile.eof()) {
-    char* tempname = new char(30);
-    ffile >> tempname;
-    fnames.push_back(tempname);
-  }
-  // gets all the last names from last name file
   while (!lfile.eof()) {
     char* tempname = new char(30);
     lfile >> tempname;
     lnames.push_back(tempname);
-    }
+  }
   
   // prompt user with commands
   cout << endl << "To create a new entry for student(s), type ADD" << endl;
@@ -91,11 +92,13 @@ int main() {
 
   while (run == true) { // while user has not quit yet
     cin >> response;
-    if (strcmp(response, "ADD") == 0) { // if add a student, run add function
+    
+    if (strcmp(response, "ADD") == 0) { // if add student(s)
       cout << "Add by random student generator? yes or no: ";
       char yn[5] = {};
       cin >> yn;
-      if (strcmp(yn, "yes") == 0) {
+
+      if (strcmp(yn, "yes") == 0) { // add randomly generated students
 	int n;
 	cout << "Input number of students to generate: ";
 	cin >> n;
@@ -107,89 +110,14 @@ int main() {
 	  int lnameindex = rand() % lnames.size(); // random last name
 	  strcpy(t -> fname, fnames[fnameindex]);
 	  strcpy(t -> lname, lnames[lnameindex]);
-
-	  t -> GPA = 4 * ((double)rand() / (double)RAND_MAX);
-	  t -> ID = count;
+	  t -> GPA = 4 * ((double)rand() / (double)RAND_MAX); // random GPA
+	  t -> ID = count; // increment ID
 	  count++;
-	  int hash = getHash(t -> ID, size);
-	  bool leave = false;
-	  node* current = list[hash];
-	  while (current!= NULL && current->student != NULL) {
-	    if (current -> student -> ID == t -> ID) {
-	      cout << "ID already used" << endl;
-	      leave = true;
-	      break;
-	    }
-	    current = current->next;
-	  }
-	  if (leave) {
-	    continue;
-	  }
-	  while (getSize(list[getHash(t -> ID, size)]) == 3) {
-	    node** newStudents = new node*[size * 2];
-	    // initializing newStudents, with size = size*2
-	    for (int a = 0; a < size * 2; a++) {
-	      newStudents[a] = new node();
-	      newStudents[a]->student = NULL;
-	      newStudents[a]->next = NULL;
 
-	    }
-	    // goes through all of the old hash table and rehashes into new table
-	    for (int a = 0; a < size; a++) {
-	      node* current = list[a];
-	      while (current -> student != NULL) {
-		node* tempNew = new node();
-		tempNew -> student = current -> student;
-		tempNew -> next = NULL;
-		if (newStudents[getHash(current -> student->ID, size * 2)] -> student == NULL) {
-		  newStudents[getHash(current -> student->ID, size * 2)] = tempNew;
-		}
-		else {
-		  node* tempCurrent = newStudents[getHash(current -> student -> ID, size * 2)];
-		  while (tempCurrent -> next != NULL) {
-		    tempCurrent = tempCurrent->next;
-		  }
-		  tempCurrent->next = tempNew;
-		}
-		node* tempNode = current;
-		current = current -> next;
-		delete tempNode;
-	      }
-	    }
-	    size *= 2;
-
-	    node** tempArray = list;
-	    list = newStudents;
-	    delete tempArray;
-
-	  }
-	  // when adding student and it is the first in the linked list
-	  if (list[getHash(t -> ID, size)] -> student == NULL) {
-
-	    node* add = new node();
-	    add -> student = t;
-	    add -> next = new node();
-	    add -> next -> student = NULL;
-
-	    list[getHash(t -> ID, size)] = add;
-	  }
-	  else { // if it is not the first in linked list
-
-	    node* current = list[getHash(t -> ID, size)];
-	    while (current->next != NULL && current->next->student != NULL) {
-	      current = current->next;
-	    }
-	    node* add = new node();
-	    add -> student = t;
-	    add -> next = new node();
-
-	    add -> next -> student = NULL;
-
-	    current -> next = add;
-	  }
+	  add(list, size, t);
 	}
       }
-      else if (strcmp(yn, "no") == 0) {
+      else if (strcmp(yn, "no") == 0) { // manually add student
 	// ask and get student info
 	cout << "Enter First Name: ";
 	cin >> fnameinput;
@@ -200,101 +128,26 @@ int main() {
 	cout << "Enter gpa: ";
 	cin >> gpainput;
 
-	// add student to vector list
+	// add student info
 	student *s = new student();
 	strcpy(s -> fname, fnameinput);
 	strcpy(s -> lname, lnameinput);
 	s -> ID = idinput;
 	s -> GPA = gpainput;
 
-	int hash = getHash(s -> ID, size);
-
-	bool leave = false;
-	node* current = list[hash];
-	while (current -> student != NULL) {
-	  if (current -> student -> ID == s -> ID) {
-	    cout << "ID already exists" << endl;
-	    leave = true;
-	    break;
-	  }
-	  current = current -> next;
-	}
-	if (leave) {
-	  continue;
-	}
-	
-	while (getSize(list[getHash(s -> ID, size)]) == 3) {
-	  node** newStudents = new node*[size * 2];
-	  // initializing newStudents, with size = size*2
-	  for (int a = 0; a < size * 2; a++) {
-	    newStudents[a] = new node();
-	    newStudents[a] -> student = NULL;
-	    newStudents[a] -> next = NULL;
-
-	  }
-	  // goes through all of the old hash table and rehashes into new table
-	  for (int a = 0; a < size; a++) {
-	    node* current = list[a];
-	    while (current != NULL && current -> student != NULL) {
-	      node* tempNew = new node();
-	      tempNew -> student = current -> student;
-	      tempNew -> next = NULL;
-	      if (newStudents[getHash(current -> student -> ID, size * 2)] -> student == NULL) {
-		newStudents[getHash(current -> student -> ID, size * 2)] = tempNew;
-	      }
-	      else {
-		node* tempCurrent = newStudents[getHash(current -> student->ID, size * 2)];
-		while (tempCurrent -> next != NULL) {
-		  tempCurrent = tempCurrent -> next;
-		}
-		tempCurrent -> next = tempNew;
-	      }
-	      node* tempNode = current;
-	      current = current -> next;
-	      delete tempNode;
-	    }
-	  }
-	  size *= 2;
-
-	  node** tempArray = list;
-	  list = newStudents;
-	  delete tempArray;
-
-	}
-	// when adding student and it is the first in the linked list
-	if (list[getHash(s -> ID, size)] -> student == NULL) {
-
-	  node* add = new node();
-	  add -> student = s;
-	  add -> next = new node();
-	  add -> next -> student = NULL;
-
-	  list[getHash(s -> ID, size)] = add;
-	}
-	else { // if it is not the first in linked list
-	  node* current = list[getHash(s->ID, size)];
-	  while (current -> next != NULL && current -> next -> student != NULL) {
-	    current = current -> next;
-	  }
-	  node* add = new node();
-	  add -> student = s;
-	  add -> next = new node();
-
-	  add -> next -> student = NULL;
-
-	  current -> next = add;
-	}
-
+	add(list, size, s);
       }
       cout << "ADDED" << endl << endl;
     }
-    else if (strcmp(response, "PRINT") == 0) { // if print students, run print function
+    else if (strcmp(response, "PRINT") == 0) { // print students
       for (int a = 0; a < size; a++) {
 	node* t = list[a];
+	// run through student list and print out student data
 	while (t != NULL && t -> student != NULL) {
 	  cout << t -> student -> fname << " " << t -> student -> lname << endl;
 	  cout << "ID: " << t -> student -> ID << endl;
 
+	  // show gpa to only two decimal places
 	  cout.precision (2);
 	  cout.setf(ios::showpoint);
 	  cout << "GPA: " << fixed << t -> student -> GPA << endl;
@@ -305,18 +158,19 @@ int main() {
       }
       cout << "PRINTED\n\n";
     }
-    else if (strcmp(response, "DELETE") == 0) { // if delete student, run delete function
+    else if (strcmp(response, "DELETE") == 0) { // delete a student 
       int input;
 
       cout << "Please enter ID of student to delete: ";
       cin >> input;
 
-      if (list[getHash(input, size)] -> student ->ID == input) {
+      // run through student list and look for student with given id
+      if (list[getHash(input, size)] -> student -> ID == input) {
 	node* t = list[getHash(input, size)];
 	list[getHash(input, size)] = list[getHash(input, size)] -> next;
 	delete t;
       }
-      else {
+      else { 
 	node* current = list[getHash(input, size)];
 	while (current -> next -> student -> ID != input) {
 	  current = current -> next;
@@ -327,7 +181,7 @@ int main() {
       }
       cout << "DELETED \n\n";
     }
-    else if (strcmp(response, "QUIT") == 0) { // if quit, set run to false
+    else if (strcmp(response, "QUIT") == 0) { // quit
       run = false;
     }
     else { // if not a valid command, tell user
@@ -359,4 +213,67 @@ int getSize(node* start) {
     start = start->next;
   }
   return n;
+}
+
+void add(node** list, int size, student* t) {
+  int hash = getHash(t -> ID, size);
+  
+  // rehash till less than 3 links to hash address  
+  while (getSize(list[getHash(t -> ID, size)]) == 3) {
+    node** doubleList = new node*[size * 2]; // initialize student list with double size
+    for (int a = 0; a < size * 2; a++) {
+      doubleList[a] = new node();
+      doubleList[a]->student = NULL;
+      doubleList[a]->next = NULL;
+
+    }
+    // rehash students into new table
+    for (int a = 0; a < size; a++) {
+      node* current = list[a];
+      while (current -> student != NULL) {
+	node* tempNew = new node();
+	tempNew -> student = current -> student;
+	tempNew -> next = NULL;
+	if (doubleList[getHash(current -> student->ID, size * 2)] -> student == NULL) {
+	  doubleList[getHash(current -> student->ID, size * 2)] = tempNew;
+	}
+	else {
+	  node* tempCurrent = doubleList[getHash(current -> student -> ID, size * 2)];
+	  while (tempCurrent -> next != NULL) {
+	    tempCurrent = tempCurrent->next;
+	  }
+	  tempCurrent->next = tempNew;
+	}
+	node* tempNode = current;
+	current = current -> next;
+	delete tempNode;
+      }
+    }
+    size *= 2;
+    node** tempArray = list;
+    list = doubleList;
+    delete tempArray;
+
+  }
+  // if student is first in the list
+  if (list[getHash(t -> ID, size)] -> student == NULL) {
+    node* add = new node();
+    add -> student = t;
+    add -> next = new node();
+    add -> next -> student = NULL;
+
+    list[getHash(t -> ID, size)] = add;
+  }
+  else { // not first in list
+    node* current = list[getHash(t -> ID, size)];
+    while (current->next != NULL && current->next->student != NULL) {
+      current = current->next;
+    }
+    node* add = new node();
+    add -> student = t;
+    add -> next = new node();
+    add -> next -> student = NULL;
+
+    current -> next = add;
+  }
 }
