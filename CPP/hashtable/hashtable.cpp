@@ -3,6 +3,7 @@
 #include <vector>
 #include <string.h>
 #include <time.h>
+#include <fstream>
 
 /* Hash Table: Create a hash table and a random student generator.
  * Author: Joyce Chen
@@ -25,6 +26,7 @@ struct node { // nodes for linked list struct
 
 // declare methods
 int getHash(int number, int size);
+int getSize(node* start);
 
 int main() {
   srand(time(NULL));
@@ -40,6 +42,9 @@ int main() {
   char response[10];
   bool run = true;
 
+  vector<char*> fnames;
+  vector<char*> lnames;
+
   node** list = new node*[size];
 
   for (int i = 0; i < size; i++) {
@@ -48,8 +53,28 @@ int main() {
     list[i] -> next = NULL;
   }
 
-  vector<char*> fnames;
-  vector<char*> lnames;
+  /*  cout << "input list of first name file" << endl;
+  char* fnamefile = new char(30);
+  cin.getline(fnamefile, 30);
+  ifstream fname(fnamefile);
+  
+  cout << "input list of last name file" << endl;
+  char* lnamefile = new char(30);
+  cin.getline(lnamefile, 30);
+  ifstream lname(lnamefile);
+  
+  //gets all the first names from first name file
+  while (!fname.eof()) {
+    char* tempname = new char(30);
+    fname >> tempname;
+    fnames.push_back(tempname);
+  }
+  //gets all the last names from last name file
+  while (!lname.eof()) {
+    char* tempname = new char(30);
+    lname >> tempname;
+    lnames.push_back(tempname);
+    }*/
   
   // prompt user with commands
   cout << "To create a new entry for student(s), type ADD" << endl;
@@ -157,15 +182,14 @@ int main() {
       }
       else if (yn == 'n') {
 	// ask and get student info
-	cout << "Enter First Name: ";
+	cout << "enter first name: ";
 	cin >> fnameinput;
-	cout << "Enter Last Name: ";
+	cout << "enter last name: ";
 	cin >> lnameinput;
-	cout << "Enter ID: ";
+	cout << "enter ID: ";
 	cin >> idinput;
-	cout << "Enter gpa: ";
+	cout << "enter gpa: ";
 	cin >> gpainput;
-	cout << "ADDED" << endl << endl;
 
 	// add student to vector list
 	student *s = new student();
@@ -173,14 +197,121 @@ int main() {
 	strcpy(s -> lname, lnameinput);
 	s -> ID = idinput;
 	s -> GPA = gpainput;
-	list.push_back(s);
+
+	int hash = getHash(s -> ID, size);
+
+	bool leave = false;
+	node* current = list[hash];
+	while (current -> student != NULL) {
+	  if (current -> student -> ID == s -> ID) {
+	    cout << "ID already used" << endl;
+	    leave = true;
+	    break;
+	  }
+	  current = current -> next;
+	}
+	if (leave) {
+	  continue;
+	}
+	
+	while (getSize(list[getHash(s -> ID, size)]) == 3) {
+	  node** newStudents = new node*[size * 2];
+	  //initializing newStudents, with size = size*2
+	  for (int a = 0; a < size * 2; a++) {
+	    newStudents[a] = new node();
+	    newStudents[a] -> student = NULL;
+	    newStudents[a] -> next = NULL;
+
+	  }
+	  //goes through all of the old hash table and rehashes into new table
+	  for (int a = 0; a < size; a++) {
+	    node* current = list[a];
+	    while (current != NULL && current -> student != NULL) {
+	      node* tempNew = new node();
+	      tempNew -> student = current -> student;
+	      tempNew -> next = NULL;
+	      if (newStudents[getHash(current -> student -> ID, size * 2)] -> student == NULL) {
+		newStudents[getHash(current -> student -> ID, size * 2)] = tempNew;
+	      }
+	      else {
+		node* tempCurrent = newStudents[getHash(current -> student->ID, size * 2)];
+		while (tempCurrent -> next != NULL) {
+		  tempCurrent = tempCurrent -> next;
+		}
+		tempCurrent -> next = tempNew;
+	      }
+	      node* tempNode = current;
+	      current = current -> next;
+	      delete tempNode;
+	    }
+	  }
+	  size *= 2;
+
+	  node** tempArray = list;
+	  list = newStudents;
+	  delete tempArray;
+
+	}
+	//when adding student and it is the first in the linked list
+	if (list[getHash(s -> ID, size)] -> student == NULL) {
+
+	  node* add = new node();
+	  add -> student = s;
+	  add -> next = new node();
+	  add -> next -> student = NULL;
+
+	  list[getHash(s -> ID, size)] = add;
+	}
+	else { //if it is not the first in linked list
+	  node* current = list[getHash(s->ID, size)];
+	  while (current -> next != NULL && current -> next -> student != NULL) {
+	    current = current -> next;
+	  }
+	  node* add = new node();
+	  add -> student = s;
+	  add -> next = new node();
+
+	  add -> next -> student = NULL;
+
+	  current -> next = add;
+	}
+
       }
+      cout << "ADDED" << endl << endl;
     }
     else if (strcmp(response, "PRINT") == 0) { // if print students, run print function
-      print(list);
+      for (int a = 0; a < size; a++) {
+	node* t = list[a];
+	while (t != NULL && t -> student != NULL) {
+	  cout << t -> student -> fname << " " << t -> student -> lname << endl;
+	  cout << "GPA: " << t -> student -> GPA << endl;
+	  cout << "ID: " << t -> student -> ID << endl;
+	  t = t -> next;
+	  cout << endl;
+	}
+
+      }
     }
     else if (strcmp(response, "DELETE") == 0) { // if delete student, run delete function
-      deletestudent(list);
+      int input;
+
+      cout << "please enter ID of student to delete: ";
+      cin >> input;
+
+      if (list[getHash(input, size)] -> student ->ID == input) {
+	node* t = list[getHash(input, size)];
+	list[getHash(input, size)] = list[getHash(input, size)] -> next;
+	delete t;
+      }
+      else {
+	node* current = list[getHash(input, size)];
+	while (current -> next -> student -> ID != input) {
+	  current = current -> next;
+	}
+	node* t = current -> next;
+	current -> next = t -> next;
+	delete t;
+      }
     }
     else if (strcmp(response, "QUIT") == 0) { // if quit, set run to false
       run = false;
@@ -193,45 +324,25 @@ int main() {
   return 0;
 }
 
-// to print student list
-void print (vector<student*>& list) {
-  // run through vector list and print out student data
-  for (vector<student*>::iterator p = list.begin(); p != list.end(); ++p) {
-    cout << (*p)->fname << " " << (*p)->lname << ", ";
-    cout << (*p)->ID << ", ";
-
-    // show gpa to only two decimal places
-    cout.precision (2);
-    cout.setf(ios::showpoint);
-    cout << fixed << (*p) -> GPA << endl;
-  }
-    cout << "PRINTED" << endl << endl;
-
-  return;
-}
-
-// to delete a student
-void deletestudent (vector<student*>& list) {
-  int input;
-
-  cout << "Please enter ID of student to delete: ";
-  cin >> input;
-
-    // run through vector and look for student with given id
-  for (vector<student*>::iterator p = list.begin(); p != list.end(); ++p) {
-    if ((*p)-> ID == input) { // if found, delete student data
-      delete *p;
-      list.erase(p);
-      cout << "DELETED" << endl << endl;
-
-      break;
-    }
-  }
-
-  return;
-}
-
 // hash function
 int getHash(int number, int size) {
-  
+  int address = 0;
+  while (number != 0) {
+    address *= 13;
+    address += (number % 10);
+    address %= size;
+    number /= 10;
+  }
+  address *= 13;
+  return address % size;
+}
+
+// returns size of linked list
+int getSize(node* start) {
+  int n = 0;
+  while (start != NULL && start->student != NULL) {
+    n++;
+    start = start->next;
+  }
+  return n;
 }
